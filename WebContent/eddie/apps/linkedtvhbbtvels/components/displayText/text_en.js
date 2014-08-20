@@ -1,0 +1,7 @@
+LinkedtvhbbtvApplication.who=WHO
+LinkedtvhbbtvApplication.what=WHAT
+LinkedtvhbbtvApplication.where=WHERE
+LinkedtvhbbtvApplication.chapter=CHAPTER
+LinkedtvhbbtvApplication.bookmark=BOOKMARK
+LinkedtvhbbtvApplication.shared=SHARED
+LinkedtvhbbtvApplication.joined=JOINED

@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.springfield.lou.application.types.LinkedtvhbbtvApplication;
+import org.springfield.lou.application.types.LinkedtvhbbtvelsApplication;
 import org.springfield.fs.FsNode;
 import org.springfield.fs.FsTimeLine;
 import org.springfield.lou.screen.Screen;
@@ -89,7 +89,7 @@ public class Slider {
 	 * @param slider
 	 * @return
 	 */
-	public static String getBlockData(LinkedtvhbbtvApplication parent,String content, String slider) {
+	public static String getBlockData(LinkedtvhbbtvelsApplication parent,String content, String slider) {
 		String orientation = content.split(",")[2];
 		System.out.println("orientation = "+orientation);
 	
@@ -107,7 +107,7 @@ public class Slider {
 	 * @param duration - end of the layer
 	 * @return html formatted layer
 	 */
-	public static String loadDataWho(LinkedtvhbbtvApplication parent,FsTimeLine timeline, float start, float duration) {
+	public static String loadDataWho(LinkedtvhbbtvelsApplication parent,FsTimeLine timeline, float start, float duration) {
 		String body = "";
 		int i = 1;
 		if (timeline == null) {
@@ -145,6 +145,48 @@ public class Slider {
 		return body;
 	}
 	
+	//TODO els
+	/**
+	 * Load text data for the 'who' layer
+	 * 
+	 * @param parent - parent class
+	 * @param timeline - parent timeline
+	 * @param start - start of the layer
+	 * @param duration - end of the layer
+	 * @return html formatted layer
+	 */
+	public static String loadTextDataWho(LinkedtvhbbtvelsApplication parent,FsTimeLine timeline, float start, float duration, String titleType) {
+		String body = "";
+		int i = 1;
+		if (timeline == null) {
+			System.out.println("timeline appears to be empty!");
+		}
+		
+		if (timeline.getFsNodesByType("person") == null) {
+			return body;
+		}
+		
+		for(Iterator<FsNode> iter = timeline.getFsNodesByType("person"); iter.hasNext(); ) {
+			FsNode node = (FsNode)iter.next();
+			
+			if (node.getStarttime() >= start && node.getStarttime() <= (start+duration)) {			
+				String title = node.getProperty("title");
+				
+				if (title == null) {
+					
+				} else if (title.length()>40) {
+					body+="<div id=\"mainScreenInfoWho\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title.substring(0,37)+"...</p></div>";
+				} else {
+					body+="<div id=\"mainScreenInfoWho\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title+"</p></div>";
+				}				
+			}
+			i++;
+		}
+		return body;
+	}
+	//end els TODO
+	
+	
 	/**
 	 * Load data for the 'what' layer
 	 * 
@@ -154,7 +196,7 @@ public class Slider {
 	 * @param duration - end of the layer
 	 * @return html formatted layer
 	 */
-	public static String loadDataWhat(LinkedtvhbbtvApplication parent,FsTimeLine timeline, float start, float duration) {
+	public static String loadDataWhat(LinkedtvhbbtvelsApplication parent,FsTimeLine timeline, float start, float duration) {
 		String body = "";
 		int i = 1;
 		if (timeline == null) {
@@ -192,6 +234,48 @@ public class Slider {
 		return body;
 	}
 	
+	
+	
+	// TODO els 
+	/**
+	 * Load data for the 'what' layer
+	 * 
+	 * @param parent - parent class
+	 * @param timeline - parent timeline
+	 * @param start - start of the layer
+	 * @param duration - end of the layer
+	 * @return html formatted layer
+	 */
+	public static String loadTextDataWhat(LinkedtvhbbtvelsApplication parent,FsTimeLine timeline, float start, float duration, String titleType) {
+		String body = "";
+		int i = 1;
+		if (timeline == null) {
+			System.out.println("timeline appears to be empty!");
+		} 
+		
+		if (timeline.getFsNodesByType("object") == null) {
+			return body;
+		}
+		
+		for(Iterator<FsNode> iter = timeline.getFsNodesByType("object"); iter.hasNext(); ) {
+			FsNode node = (FsNode)iter.next();
+			
+			if (node.getStarttime() >= start && node.getStarttime() <= (start+duration)) {		
+				String title = node.getProperty("title");
+				if (title == null) {
+					
+				} else if (title.length()>40) {
+					body+="<div id=\"mainScreenInfoWhat\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+ titleType +": </p><p>"+title.substring(0,37)+"...</p></div>";
+				} else {
+					body+="<div id=\"mainScreenInfoWhat\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title+"</p></div>";
+				}		
+			}
+			i++;
+		}
+		return body;
+	}
+	//end els TODO 
+	
 	/**
 	 * Load data for the 'where' layer
 	 * 
@@ -201,7 +285,7 @@ public class Slider {
 	 * @param duration - end of the layer
 	 * @return html formatted layer
 	 */
-	public static String loadDataWhere(LinkedtvhbbtvApplication parent,FsTimeLine timeline, float start, float duration) {
+	public static String loadDataWhere(LinkedtvhbbtvelsApplication parent,FsTimeLine timeline, float start, float duration) {
 		String body = "";
 		int i = 1;
 		if (timeline == null) {
@@ -239,6 +323,48 @@ public class Slider {
 		return body;
 	}
 	
+	
+	// TODO els
+	/**
+	 * Load data for the 'where' layer
+	 * 
+	 * @param parent - parent class
+	 * @param timeline - parent timeline
+	 * @param start - start of the layer
+	 * @param duration - end of the layer
+	 * @return html formatted layer
+	 */
+	public static String loadTextDataWhere(LinkedtvhbbtvelsApplication parent,FsTimeLine timeline, float start, float duration, String titleType) {
+		String body = "";
+		int i = 1;
+		if (timeline == null) {
+			System.out.println("timeline appears to be empty!");
+		} 
+		
+		if (timeline.getFsNodesByType("location") == null) {
+			return body;
+		}
+		
+		for(Iterator<FsNode> iter = timeline.getFsNodesByType("location"); iter.hasNext(); ) {
+			FsNode node = (FsNode)iter.next();
+			
+			if (node.getStarttime() >= start && node.getStarttime() <= (start+duration)) {		
+				String title = node.getProperty("title");
+				
+				if (title == null) {
+					
+				} else if (title.length()>40) {
+					body+="<div id=\"mainScreenInfoWhere\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title.substring(0,37)+"...</p></div>";
+				} else {
+					body+="<div id=\"mainScreenInfoWhere\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title+"</p></div>";
+				}
+			}
+			i++;
+		}
+		return body;
+	}
+	//end els TODO
+	
 	/**
 	 * Load data for the chapter layer
 	 * 
@@ -246,7 +372,7 @@ public class Slider {
 	 * @param timeline - parent timeline
 	 * @return html formatted layer
 	 */
-	public static String loadDataChapter(LinkedtvhbbtvApplication parent, FsTimeLine timeline) {
+	public static String loadDataChapter(LinkedtvhbbtvelsApplication parent, FsTimeLine timeline) {
 		String body = "";		
 		
 		int i = 1;
@@ -280,6 +406,42 @@ public class Slider {
 		return body;
 	}
 	
+	//TODO els
+	/**
+	 * Load data for the chapter layer
+	 * 
+	 * @param parent - parent class
+	 * @param timeline - parent timeline
+	 * @return html formatted layer
+	 */
+	public static String loadTextDataChapter(LinkedtvhbbtvelsApplication parent, FsTimeLine timeline, String titleType) {
+		String body = "";		
+		
+		int i = 1;
+		if (timeline == null) {
+			System.out.println("timeline appears to be empty!");
+		} 
+		
+		if (timeline.getFsNodesByType("chapter") == null) {
+			return body;
+		}
+		
+		for(Iterator<FsNode> iter = timeline.getFsNodesByType("chapter"); iter.hasNext(); ) {
+			FsNode node = (FsNode)iter.next();
+			String title = node.getProperty("title");
+			if (title == null) {
+				
+			} else if (title.length()>40) {
+				body+="<div id=\"mainScreenInfoChapter\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title.substring(37)+"...</p></div>";
+			} else {
+				body+="<div id=\"mainScreenInfoChapter\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title+"</p></div>";
+			}
+			i++;
+		}
+		return body;
+	}
+	//end els TODO
+	
 	/**
 	 * Load bookmark data
 	 * 
@@ -288,7 +450,7 @@ public class Slider {
 	 * @param timeline - parent timeline
 	 * @return html formatted data
 	 */
-	public static String loadDataBookmark(Screen s,LinkedtvhbbtvApplication parent,FsTimeLine timeline) {
+	public static String loadDataBookmark(Screen s,LinkedtvhbbtvelsApplication parent,FsTimeLine timeline) {
 		String body = "";
 		UserManager um = parent.getUserManager();
 		String username = s.getUserName();
@@ -414,7 +576,7 @@ public class Slider {
 	 * @param timeline - parent timeline
 	 * @return html formatted data
 	 */
-	public static String loadDataShared(Screen s,LinkedtvhbbtvApplication parent,FsTimeLine timeline) {
+	public static String loadDataShared(Screen s,LinkedtvhbbtvelsApplication parent,FsTimeLine timeline) {
 		String body = "";
 		UserManager um = parent.getUserManager();
 		String username = s.getUserName();
@@ -542,7 +704,7 @@ public class Slider {
 	 * @param timeline - parent timeline
 	 * @return html formatted data
 	 */
-	public static String loadDataJoined(LinkedtvhbbtvApplication parent,FsTimeLine timeline) {
+	public static String loadDataJoined(LinkedtvhbbtvelsApplication parent,FsTimeLine timeline) {
 		String body = "";
 		UserManager um = parent.getUserManager();
 		for(Iterator<String> iter = um.getUsers(); iter.hasNext(); ) {
@@ -580,7 +742,7 @@ public class Slider {
 	 * @param timeline - parent timeline
 	 * @return html formatted data
 	 */
-	public static String loadDataChat(LinkedtvhbbtvApplication parent,FsTimeLine timeline) {
+	public static String loadDataChat(LinkedtvhbbtvelsApplication parent,FsTimeLine timeline) {
 		String body = "";
 		body += "<div class=\"sliderblock chat\" id=\"chat_block1\">";
 		body+="<img class=\"sliderimg\" src=\"/eddie/apps/linkedtvhbbtv/img/people/rutger.png\"  />";

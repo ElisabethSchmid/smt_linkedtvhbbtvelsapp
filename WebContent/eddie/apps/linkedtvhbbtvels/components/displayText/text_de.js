@@ -1,0 +1,7 @@
+LinkedtvhbbtvApplication.who=WER
+LinkedtvhbbtvApplication.what=WAS
+LinkedtvhbbtvApplication.where=WO
+LinkedtvhbbtvApplication.chapter=KAPITEL
+LinkedtvhbbtvApplication.bookmark=LESEZEICHEN
+LinkedtvhbbtvApplication.shared=GETEILT
+LinkedtvhbbtvApplication.joined=VERBUNDEN

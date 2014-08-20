@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="smt_linkedtvhbbtvapp" default="deploy-war">
+<project name="smt_linkedtvhbbtvelsapp" default="deploy-war">
 	
 	<property name="root.dir" value="." />
 	<property name="sources.dir" value="${root.dir}/src" />

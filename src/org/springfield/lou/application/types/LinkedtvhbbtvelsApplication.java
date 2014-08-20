@@ -23,6 +23,7 @@
 package org.springfield.lou.application.types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -57,7 +58,7 @@ import org.springfield.mojo.linkedtv.GAINObjectEntity;
  * @package org.springfield.lou.application.types
  * 
  */
-public class LinkedtvhbbtvApplication extends Html5Application {
+public class LinkedtvhbbtvelsApplication extends Html5Application {
 	private static String GAIN_ACCOUNT = "LINKEDTV-TEST";
 	
 	private Episode episode;
@@ -70,7 +71,18 @@ public class LinkedtvhbbtvApplication extends Html5Application {
 	private long currentTime = 0l;
 	private boolean hbbtvMode = false; 
 	
-	public LinkedtvhbbtvApplication(String id) {
+	
+	String language = "de"; //change language to something else then de to load default
+	String whoSliderName = "WHO";
+	String whatSliderName = "WHAT";
+	String whereSliderName = "WHERE";
+	String chapterSliderName = "CHAPTER";
+	String bookmarkSliderName = "BOOKMARK";
+	String sharedSliderName = "SHARED";
+	String joinedSliderName = "JOINED";
+
+	
+	public LinkedtvhbbtvelsApplication(String id) {
 		super(id); 
 		gain = new GAIN(GAIN_ACCOUNT, id);
 		gain.application_new();
@@ -78,7 +90,7 @@ public class LinkedtvhbbtvApplication extends Html5Application {
 		System.out.println("LINKEDTVHBBTV APPLICATION STARTED");
 	}
 	
-	public LinkedtvhbbtvApplication(String id, String remoteReceiver) {
+	public LinkedtvhbbtvelsApplication(String id, String remoteReceiver) {
 		super(id, remoteReceiver); 
 		
 		gain = new GAIN(GAIN_ACCOUNT, id);
@@ -153,7 +165,54 @@ public class LinkedtvhbbtvApplication extends Html5Application {
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ episode.getStreamuri(3) +")");
 			//this.componentmanager.getComponent("hbbtvvideo").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "play()");
+			//TODO els
 			loadContent(s, "overlay"); // this is just for testing, remove it later!
+			this.componentmanager.getComponent("overlay").put("app", "showQRCode()");
+			String fileContent = "";
+			
+			if(language.equals("de")){
+				fileContent = FsFileReader.getFileContent(this, "displayText", componentmanager.getComponentJS("text_de"));
+			} else if(language.equals("en")){
+				fileContent = FsFileReader.getFileContent(this, "displayText", componentmanager.getComponentJS("text_en"));
+			} else {
+				// TODO els
+				fileContent = FsFileReader.getFileContent(this, "displayText", componentmanager.getComponentJS("defaultText"));
+				// end els TODO
+			}
+			if(fileContent.length() > 0){
+				String[] defaultTextParameterRows = fileContent.split("\n");
+				HashMap <String,String> defaultTextParameters = new HashMap<String,String>();
+				for (String row : defaultTextParameterRows) {
+					System.out.println(row);
+					String [] defaultTextParameterLine = row.split("=");
+					defaultTextParameters.put(defaultTextParameterLine[0],defaultTextParameterLine[1]);
+				}
+				System.out.println("map:" + defaultTextParameters.toString());
+				
+				whoSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.who");
+				whatSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.what");
+				whereSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.where");
+				chapterSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.chapter");
+				joinedSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.bookmark");
+				bookmarkSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.shared");
+				sharedSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.joined");
+				
+				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.who"));
+				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.what"));
+				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.where"));
+				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.chapter"));
+				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.bookmark"));
+				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.shared"));
+				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.joined"));
+			} //else {
+//		whoSliderName = "WER";
+//		whatSliderName = "WAS";
+//		whereSliderName = "WO";
+//		chapterSliderName = "KAPITEL";
+//		joinedSliderName = "VERBUNDEN";
+//		bookmarkSliderName = "LESEZEICHEN";
+//		sharedSliderName = "GETEILT";
+//	}
 		}		
 	}
 	
@@ -252,6 +311,9 @@ public class LinkedtvhbbtvApplication extends Html5Application {
             	handleShare(s,content);
             } else if (command.equals("infoblockfinished")) {
             	handleInfoBlockFinished(s, content);
+            } else if (command.equals("displaymainscreentext")) { // TODO els
+            	//handleLoadTextData(s, content); //proof if content needed
+            	handleLoadTextData(s);
             } else {
             	super.putOnScreen(s, from, msg);
             }
@@ -290,7 +352,7 @@ public class LinkedtvhbbtvApplication extends Html5Application {
 	 */
 	private void handleLoadData(Screen s,String content) {
 		if (timeline == null) {
-			initTimeLine();				
+			initTimeLine();	// initialize timeline with all Data	 		
 		}	
 
 		float chapterStart = 0f;
@@ -301,7 +363,7 @@ public class LinkedtvhbbtvApplication extends Html5Application {
 			chapterStart = chapter.getStarttime();
 			chapterDuration = chapter.getDuration();
 		}
-			
+		
 		switch (sliders.valueOf(content)) {
 			case whoslider:
 				String body = Slider.loadDataWho(this,timeline, chapterStart, chapterDuration);
@@ -333,6 +395,41 @@ public class LinkedtvhbbtvApplication extends Html5Application {
 				break;
 		}
 	}
+	
+	//TODO els 
+	private void handleLoadTextData(Screen s){
+		if (timeline == null) {
+			initTimeLine();	// initialize timeline with all Data	 		
+		}	
+
+		float chapterStart = 0f;
+		float chapterDuration = 0f;
+		
+		FsNode chapter = timeline.getCurrentFsNode("chapter", currentTime);
+		if (chapter != null) {
+			chapterStart = chapter.getStarttime();
+			chapterDuration = chapter.getDuration();
+		}
+		
+		//TODO els swithc case necessary ?? 
+		String bodyWho = Slider.loadTextDataWho(this,timeline, chapterStart, chapterDuration, whoSliderName);
+		String bodyWhere = Slider.loadTextDataWhere(this,timeline, chapterStart, chapterDuration, whereSliderName);
+		String bodyWhat = Slider.loadTextDataWhat(this,timeline, chapterStart, chapterDuration, whatSliderName);
+		String bodyChapter = Slider.loadTextDataChapter(this,timeline, chapterSliderName);
+	
+		
+		this.componentmanager.getComponent("mainscreeninfo").put("app", "html(" +")");
+		System.out.println("els: " +bodyWho);
+		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhere+")");
+		System.out.println("els: " +bodyWhere);
+		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhat+")");
+		System.out.println("els: " +bodyWhat);
+		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyChapter+")");
+		System.out.println("els: " +bodyChapter);
+		// end els TODO
+	}
+	//end els TODO
+	
 	
 	/**
 	 * Loading data for the specified entity
@@ -438,6 +535,33 @@ public class LinkedtvhbbtvApplication extends Html5Application {
 		float chapterDuration = 0f;
 		currentTime = ms;
 		
+		
+		//TODO els
+		int qrCodeDisplayTime = 20000;
+		if(currentTime >= qrCodeDisplayTime){
+			this.componentmanager.getComponent("overlay").put("app", "hideQRCode()");
+		}
+		//end els TODO
+		
+		ComponentInterface compMainScreenInfo = getComponentManager().getComponent("mainscreeninfo");
+		if (compMainScreenInfo!=null) {
+			String bodyWho = Slider.loadTextDataWho(this,timeline, chapterStart, chapterDuration, whoSliderName);
+			String bodyWhere = Slider.loadTextDataWhere(this,timeline, chapterStart, chapterDuration, whereSliderName);
+			String bodyWhat = Slider.loadTextDataWhat(this,timeline, chapterStart, chapterDuration, whatSliderName);
+			String bodyChapter = Slider.loadTextDataChapter(this,timeline, chapterSliderName);
+		
+			
+			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWho+")");
+			System.out.println("els: time: " +bodyWho);
+			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhere+")");
+			System.out.println("els: time: " +bodyWhere);
+			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhat+")");
+			System.out.println("els: time: " +bodyWhat);
+			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyChapter+")");
+			System.out.println("els: time: " +bodyChapter);
+		}
+			
+		
 		ComponentInterface comp = getComponentManager().getComponent("chapterslider");
 		if (comp!=null) {
 			int blocknumber = timeline.getCurrentFsNodeNumber("chapter", ms);
@@ -512,63 +636,71 @@ public class LinkedtvhbbtvApplication extends Html5Application {
 	 * @param content - screen name
 	 */
 	private void handleLoadScreen(Screen s,String content) {
-		removeCurrentSliders(s);
-		System.out.println("LOAD SCREEN="+content);
-		if (content.equals("screens_episode")) {
-			s.setContent("content","");
-			addSlider(s, "content", "whoslider");
-			addSlider(s, "content", "whatslider");
-			addSlider(s, "content", "whereslider");
-			addSlider(s, "content", "chapterslider");
-			loadContent(s, "sliderevents");
-		} else if (content.equals("screens_overview")) {
-			s.setContent("content","");
-		} else if (content.equals("screens_bookmarks")) {
-			s.setContent("content","");
-			addSlider(s, "content", "bookmarkslider");
-			addSlider(s, "content", "sharedslider");	
-			loadContent(s, "sliderevents");
-		} else if (content.equals("screens_social")) {
-			s.setContent("content","");
-			addSlider(s, "content", "joinedslider");	
-			loadContent(s, "sliderevents");
-		}
-	}
+	removeCurrentSliders(s);
+	System.out.println("LOAD SCREEN="+content);
 	
-	/**
-	 * Add slider, replaces some names in javascript files to match the slider type
-	 * 
-	 * @param s - screen
-	 * @param target - target to add slider
-	 * @param slider - type of slider
-	 */
-	private void addSlider(Screen s, String target, String slider){
-		String body = FsFileReader.getFileContent(this, slider, getComponentManager().getComponentPath("slider"));
-				
-		body = body.replaceAll("/slider", slider);
-		body = body.replaceAll("/NAME", slider.substring(0, slider.indexOf("slider")).toUpperCase());
-		body = body.replaceAll("/class", Slider.colorClasses.get(slider));
-		body = body.replaceAll("/position", Slider.positions.get(slider));
-		
-		s.addContent(target, body);
-		
-		body = FsFileReader.getFileContent(this, slider, componentmanager.getComponentJS("slider"));
-		body = body.replaceAll("/sliderid", slider.substring(0, slider.indexOf("slider")));
-		body = body.replaceAll("/slider", slider);
-		body = body.replaceAll("/Slider", slider.substring(0, 1).toUpperCase() + slider.substring(1));
-		
-		s.setScript(target, body);
-		BasicComponent sliderComponent = (BasicComponent)this.componentmanager.getComponent(slider);
-		if(sliderComponent==null){
-			sliderComponent = new BasicComponent(); 
-			sliderComponent.setId(slider);
-			sliderComponent.setApplication(this);
-		}
-		this.addComponentToScreen(sliderComponent, s);
-
-		//sliderComponent.put("app", "setlanguage("+presentation.getLanguage()+")");
-		sliderComponent.put("app", "setlanguage(de)");
+	if (content.equals("screens_episode")) { 
+		//better Solution eg. read names from properties-File?? Source/externalize Strings
+		s.setContent("content","");
+		addSlider(s, "content", "whoslider", whoSliderName);//Name is being used
+		addSlider(s, "content", "whatslider", whatSliderName);
+		addSlider(s, "content", "whereslider", whereSliderName);
+		addSlider(s, "content", "chapterslider", chapterSliderName);
+		loadContent(s, "sliderevents");
+	} else if (content.equals("screens_overview")) {
+		s.setContent("content","");
+	} else if (content.equals("screens_bookmarks")) {
+		s.setContent("content","");
+		addSlider(s, "content", "bookmarkslider", bookmarkSliderName);
+		addSlider(s, "content", "sharedslider", sharedSliderName);	
+		loadContent(s, "sliderevents");
+	} else if (content.equals("screens_social")) {
+		s.setContent("content","");
+		addSlider(s, "content", "joinedslider", joinedSliderName);	
+		loadContent(s, "sliderevents");
 	}
+}
+
+/**
+ * Add slider, replaces some names in javascript files to match the slider type
+ * 
+ * @param s - screen
+ * @param target - target to add slider
+ * @param slider - type of slider
+ * @param sliderName - type of sliderName
+ * 
+ */
+private void addSlider(Screen s, String target, String slider, String sliderName){
+	String body = FsFileReader.getFileContent(this, slider, getComponentManager().getComponentPath("slider"));
+			
+	body = body.replaceAll("/slider", slider);
+	body = body.replaceAll("/NAME", sliderName.toUpperCase());
+	//Name of the Slider 
+	//slider.substring(0, slider.indexOf("slider")).toUpperCase()
+	body = body.replaceAll("/class", Slider.colorClasses.get(slider));
+	body = body.replaceAll("/position", Slider.positions.get(slider));
+	
+	s.addContent(target, body);
+	
+	body = FsFileReader.getFileContent(this, slider, componentmanager.getComponentJS("slider"));
+	body = body.replaceAll("/sliderid", slider.substring(0, slider.indexOf("slider")));
+	body = body.replaceAll("/slider", slider);
+	body = body.replaceAll("/Slider", slider.substring(0, 1).toUpperCase() + slider.substring(1));
+	
+	s.setScript(target, body);
+	BasicComponent sliderComponent = (BasicComponent)this.componentmanager.getComponent(slider);
+	if(sliderComponent==null){
+		sliderComponent = new BasicComponent(); 
+		sliderComponent.setId(slider);
+		sliderComponent.setApplication(this);
+	}
+	this.addComponentToScreen(sliderComponent, s);
+
+	//sliderComponent.put("app", "setlanguage("+presentation.getLanguage()+")");
+	sliderComponent.put("app", "setlanguage(de)");
+}
+
+	
 	
 	/**
 	 * 
@@ -715,6 +847,10 @@ public class LinkedtvhbbtvApplication extends Html5Application {
 			this.componentmanager.getComponent("video").put("app", "started()");
 		} else {
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "started()");
+			
+			//TODO els
+			loadContent(s, "mainscreeninfo");
+			this.componentmanager.getComponent("mainscreeninfo").put("app", "showMainScreenInfo()");
 		}
 		gain.player_play(s.getId(), episode.getMediaResourceId(), videoTime);
 	}

@@ -33,7 +33,7 @@ function /Slider(options){
 
 	var insertListener = function(event) {
         if (event.animationName == "nodeInserted") {
-                 queue.push($(event.target).find('div[id^="locator"]').text());
+                queue.push($(event.target).find('div[id^="locator"]').text());
                 startQueueHandling();
         }
 	}
