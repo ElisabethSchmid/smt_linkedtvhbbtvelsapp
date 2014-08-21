@@ -420,7 +420,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		String bodyChapter = Slider.loadTextDataChapter(this,timeline, chapterSliderName);
 	
 		
-		this.componentmanager.getComponent("mainscreeninfo").put("app", "html(" +")");
+		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWho +")");
 		System.out.println("els: " +bodyWho);
 		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhere+")");
 		System.out.println("els: " +bodyWhere);

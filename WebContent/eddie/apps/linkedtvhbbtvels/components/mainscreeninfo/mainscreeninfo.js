@@ -65,8 +65,9 @@ function Mainscreeninfo(options) {
 	}
 	
 	self.putContent = function(content){
-		var contentId = $(content).attr('id')
-		$('#contentId').html(content);
+		var contentId = $(content).attr('id');
+		$('#'+ contentId).empty();
+		$('#'+ contentId).html(content);
 		//eddie.putLou('notification','show(hideMainScreenInfo)');
 	}
 	

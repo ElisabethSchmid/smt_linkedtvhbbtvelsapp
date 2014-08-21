@@ -163,6 +163,7 @@ public class Slider {
 		}
 		
 		if (timeline.getFsNodesByType("person") == null) {
+			body+="<div id=\"mainScreenInfoWho\" class=\"textToDisplay\"></div>"; //TODO
 			return body;
 		}
 		
@@ -173,7 +174,7 @@ public class Slider {
 				String title = node.getProperty("title");
 				
 				if (title == null) {
-					
+					body+="<div id=\"mainScreenInfoWho\" class=\"textToDisplay\"></div>"; //TODO
 				} else if (title.length()>40) {
 					body+="<div id=\"mainScreenInfoWho\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title.substring(0,37)+"...</p></div>";
 				} else {
@@ -254,6 +255,7 @@ public class Slider {
 		} 
 		
 		if (timeline.getFsNodesByType("object") == null) {
+			body+="<div id=\"mainScreenInfoWhat\" class=\"textToDisplay\"></div>"; //TODO
 			return body;
 		}
 		
@@ -263,7 +265,7 @@ public class Slider {
 			if (node.getStarttime() >= start && node.getStarttime() <= (start+duration)) {		
 				String title = node.getProperty("title");
 				if (title == null) {
-					
+					body+="<div id=\"mainScreenInfoWhat\" class=\"textToDisplay\"></div>"; //TODO
 				} else if (title.length()>40) {
 					body+="<div id=\"mainScreenInfoWhat\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+ titleType +": </p><p>"+title.substring(0,37)+"...</p></div>";
 				} else {
@@ -342,6 +344,7 @@ public class Slider {
 		} 
 		
 		if (timeline.getFsNodesByType("location") == null) {
+			body+="<div id=\"mainScreenInfoWhere\" class=\"textToDisplay\"></div>"; //TODO
 			return body;
 		}
 		
@@ -352,7 +355,7 @@ public class Slider {
 				String title = node.getProperty("title");
 				
 				if (title == null) {
-					
+					body+="<div id=\"mainScreenInfoWhere\" class=\"textToDisplay\"></div>"; //TODO
 				} else if (title.length()>40) {
 					body+="<div id=\"mainScreenInfoWhere\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title.substring(0,37)+"...</p></div>";
 				} else {
@@ -423,6 +426,7 @@ public class Slider {
 		} 
 		
 		if (timeline.getFsNodesByType("chapter") == null) {
+			body+="<div id=\"mainScreenInfoChapter\" class=\"textToDisplay\"></div>"; //TODO
 			return body;
 		}
 		
@@ -430,7 +434,7 @@ public class Slider {
 			FsNode node = (FsNode)iter.next();
 			String title = node.getProperty("title");
 			if (title == null) {
-				
+				body+="<div id=\"mainScreenInfoChapter\" class=\"textToDisplay\"></div>"; //TODO
 			} else if (title.length()>40) {
 				body+="<div id=\"mainScreenInfoChapter\" class=\"textToDisplay\"><p>"+ titleType +": </p><p>"+title.substring(37)+"...</p></div>";
 			} else {
