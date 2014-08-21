@@ -38,6 +38,7 @@ import org.springfield.lou.screen.Screen;
 import org.springfield.lou.tools.FsFileReader;
 import org.springfield.lou.user.User;
 import org.springfield.mojo.linkedtv.Episode;
+
 import org.springfield.mojo.linkedtv.GAIN;
 import org.springfield.mojo.linkedtv.GAINObjectEntity;
 
@@ -419,15 +420,18 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		String bodyWhat = Slider.loadTextDataWhat(this,timeline, chapterStart, chapterDuration, whatSliderName);
 		String bodyChapter = Slider.loadTextDataChapter(this,timeline, chapterSliderName);
 	
-		
-		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWho +")");
-		System.out.println("els: " +bodyWho);
-		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhere+")");
-		System.out.println("els: " +bodyWhere);
-		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhat+")");
-		System.out.println("els: " +bodyWhat);
-		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyChapter+")");
-		System.out.println("els: " +bodyChapter);
+		setContentAllScreensWithRole("mainscreen", "mainScreenInfoWho", bodyWho);
+		setContentAllScreensWithRole("mainscreen", "mainScreenInfoWhere", bodyWhere);
+		setContentAllScreensWithRole("mainscreen", "mainScreenInfoWhat", bodyWhat);
+		setContentAllScreensWithRole("mainscreen", "mainScreenInfoChapter", bodyChapter);
+//		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWho +")");
+//		System.out.println("els: " +bodyWho);
+//		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhere+")");
+//		System.out.println("els: " +bodyWhere);
+//		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhat+")");
+//		System.out.println("els: " +bodyWhat);
+//		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyChapter+")");
+//		System.out.println("els: " +bodyChapter);
 		// end els TODO
 	}
 	//end els TODO
@@ -555,15 +559,18 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			String bodyWhat = Slider.loadTextDataWhat(this,timeline, chapterStart, chapterDuration, whatSliderName);
 			String bodyChapter = Slider.loadTextDataChapter(this,timeline, chapterSliderName);
 		
-			
-			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWho+")");
-			System.out.println("els: time: " +bodyWho);
-			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhere+")");
-			System.out.println("els: time: " +bodyWhere);
-			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhat+")");
-			System.out.println("els: time: " +bodyWhat);
-			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyChapter+")");
-			System.out.println("els: time: " +bodyChapter);
+			setContentAllScreensWithRole("mainscreen", "mainScreenInfoWho", bodyWho);
+			setContentAllScreensWithRole("mainscreen", "mainScreenInfoWhere", bodyWhere);
+			setContentAllScreensWithRole("mainscreen", "mainScreenInfoWhat", bodyWhat);
+			setContentAllScreensWithRole("mainscreen", "mainScreenInfoChapter", bodyChapter);
+//			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWho+")");
+//			System.out.println("els: time: " +bodyWho);
+//			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhere+")");
+//			System.out.println("els: time: " +bodyWhere);
+//			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhat+")");
+//			System.out.println("els: time: " +bodyWhat);
+//			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyChapter+")");
+//			System.out.println("els: time: " +bodyChapter);
 		}
 			
 		
