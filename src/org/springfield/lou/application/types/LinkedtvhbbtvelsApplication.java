@@ -22,6 +22,7 @@
 
 package org.springfield.lou.application.types;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -165,18 +166,19 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ episode.getStreamuri(3) +")");
 			//this.componentmanager.getComponent("hbbtvvideo").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "play()");
+		}
 			//TODO els
 			loadContent(s, "overlay"); // this is just for testing, remove it later!
 			this.componentmanager.getComponent("overlay").put("app", "showQRCode()");
 			String fileContent = "";
 			
 			if(language.equals("de")){
-				fileContent = FsFileReader.getFileContent(this, "displayText", componentmanager.getComponentJS("text_de"));
+				fileContent = FsFileReader.getFileContent(this, "displayText", "displayText"+File.separator+"text_de.js");
 			} else if(language.equals("en")){
-				fileContent = FsFileReader.getFileContent(this, "displayText", componentmanager.getComponentJS("text_en"));
+				fileContent = FsFileReader.getFileContent(this, "displayText", "displayText")+File.separator+"text_en.js";
 			} else {
 				// TODO els
-				fileContent = FsFileReader.getFileContent(this, "displayText", componentmanager.getComponentJS("defaultText"));
+				fileContent = FsFileReader.getFileContent(this, "displayText", "displayText")+File.separator+"defaultText.js";
 				// end els TODO
 			}
 			if(fileContent.length() > 0){
@@ -213,7 +215,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 //		bookmarkSliderName = "LESEZEICHEN";
 //		sharedSliderName = "GETEILT";
 //	}
-		}		
+				
 	}
 	
 	/**
@@ -539,7 +541,10 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		//TODO els
 		int qrCodeDisplayTime = 20000;
 		if(currentTime >= qrCodeDisplayTime){
-			this.componentmanager.getComponent("overlay").put("app", "hideQRCode()");
+			ComponentInterface compMainScreenOverlay = getComponentManager().getComponent("overlay");
+			if (compMainScreenOverlay!=null) {
+				this.componentmanager.getComponent("overlay").put("app", "hideQRCode()");
+			}
 		}
 		//end els TODO
 		
