@@ -254,6 +254,7 @@ public class Slider {
 			System.out.println("timeline appears to be empty!");
 		} 
 		
+
 		if (timeline.getFsNodesByType("object") == null) {
 			body+="<div id=\"mainScreenInfoWhat\" class=\"textToDisplay\"></div>"; //TODO
 			return body;

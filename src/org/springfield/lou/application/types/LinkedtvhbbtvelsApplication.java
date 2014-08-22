@@ -31,14 +31,16 @@ import java.util.List;
 import org.springfield.lou.application.Html5Application;
 import org.springfield.lou.application.components.BasicComponent;
 import org.springfield.lou.application.components.ComponentInterface;
+import org.springfield.lou.application.types.demolinkedtv.MainCurrent;
+import org.springfield.lou.application.types.demolinkedtv.MainSlider;
 import org.springfield.lou.application.types.demolinkedtv.Slider;
 import org.springfield.fs.*;
+import org.springfield.hbbtvsupport.RemoteControl;
 import org.springfield.lou.screen.Capabilities;
 import org.springfield.lou.screen.Screen;
 import org.springfield.lou.tools.FsFileReader;
 import org.springfield.lou.user.User;
 import org.springfield.mojo.linkedtv.Episode;
-
 import org.springfield.mojo.linkedtv.GAIN;
 import org.springfield.mojo.linkedtv.GAINObjectEntity;
 
@@ -314,9 +316,6 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
             	handleShare(s,content);
             } else if (command.equals("infoblockfinished")) {
             	handleInfoBlockFinished(s, content);
-            } else if (command.equals("displaymainscreentext")) { // TODO els
-            	//handleLoadTextData(s, content); //proof if content needed
-            	handleLoadTextData(s);
             } else {
             	super.putOnScreen(s, from, msg);
             }
@@ -399,42 +398,6 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		}
 	}
 	
-	//TODO els 
-	private void handleLoadTextData(Screen s){
-		if (timeline == null) {
-			initTimeLine();	// initialize timeline with all Data	 		
-		}	
-
-		float chapterStart = 0f;
-		float chapterDuration = 0f;
-		
-		FsNode chapter = timeline.getCurrentFsNode("chapter", currentTime);
-		if (chapter != null) {
-			chapterStart = chapter.getStarttime();
-			chapterDuration = chapter.getDuration();
-		}
-		
-		//TODO els swithc case necessary ?? 
-		String bodyWho = Slider.loadTextDataWho(this,timeline, chapterStart, chapterDuration, whoSliderName);
-		String bodyWhere = Slider.loadTextDataWhere(this,timeline, chapterStart, chapterDuration, whereSliderName);
-		String bodyWhat = Slider.loadTextDataWhat(this,timeline, chapterStart, chapterDuration, whatSliderName);
-		String bodyChapter = Slider.loadTextDataChapter(this,timeline, chapterSliderName);
-	
-		setContentAllScreensWithRole("mainscreen", "mainScreenInfoWho", bodyWho);
-		setContentAllScreensWithRole("mainscreen", "mainScreenInfoWhere", bodyWhere);
-		setContentAllScreensWithRole("mainscreen", "mainScreenInfoWhat", bodyWhat);
-		setContentAllScreensWithRole("mainscreen", "mainScreenInfoChapter", bodyChapter);
-//		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWho +")");
-//		System.out.println("els: " +bodyWho);
-//		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhere+")");
-//		System.out.println("els: " +bodyWhere);
-//		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhat+")");
-//		System.out.println("els: " +bodyWhat);
-//		this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyChapter+")");
-//		System.out.println("els: " +bodyChapter);
-		// end els TODO
-	}
-	//end els TODO
 	
 	
 	/**
@@ -551,28 +514,11 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			}
 		}
 		//end els TODO
+
 		
-		ComponentInterface compMainScreenInfo = getComponentManager().getComponent("mainscreeninfo");
-		if (compMainScreenInfo!=null) {
-			String bodyWho = Slider.loadTextDataWho(this,timeline, chapterStart, chapterDuration, whoSliderName);
-			String bodyWhere = Slider.loadTextDataWhere(this,timeline, chapterStart, chapterDuration, whereSliderName);
-			String bodyWhat = Slider.loadTextDataWhat(this,timeline, chapterStart, chapterDuration, whatSliderName);
-			String bodyChapter = Slider.loadTextDataChapter(this,timeline, chapterSliderName);
+		MainCurrent.setOnScreen(this,s,timeline,(int)currentTime);
 		
-			setContentAllScreensWithRole("mainscreen", "mainScreenInfoWho", bodyWho);
-			setContentAllScreensWithRole("mainscreen", "mainScreenInfoWhere", bodyWhere);
-			setContentAllScreensWithRole("mainscreen", "mainScreenInfoWhat", bodyWhat);
-			setContentAllScreensWithRole("mainscreen", "mainScreenInfoChapter", bodyChapter);
-//			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWho+")");
-//			System.out.println("els: time: " +bodyWho);
-//			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhere+")");
-//			System.out.println("els: time: " +bodyWhere);
-//			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyWhat+")");
-//			System.out.println("els: time: " +bodyWhat);
-//			this.componentmanager.getComponent("mainscreeninfo").put("app", "html("+bodyChapter+")");
-//			System.out.println("els: time: " +bodyChapter);
-		}
-			
+		MainSlider.setOnScreen(this,s,timeline,(int)currentTime);
 		
 		ComponentInterface comp = getComponentManager().getComponent("chapterslider");
 		if (comp!=null) {
@@ -861,8 +807,10 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "started()");
 			
 			//TODO els
+			loadContent(s, "hbbtvmanager");
 			loadContent(s, "mainscreeninfo");
-			this.componentmanager.getComponent("mainscreeninfo").put("app", "showMainScreenInfo()");
+			loadContent(s, "mainscreenslider");
+			//this.componentmanager.getComponent("mainscreeninfo").put("app", "showMainScreenInfo()");
 		}
 		gain.player_play(s.getId(), episode.getMediaResourceId(), videoTime);
 	}
@@ -961,4 +909,81 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			gain.user_viewtime(s.getUserName(), parameters[1], s.getId(), parameters[0]);
 		}
 	}
+	
+	 public void keypressed(Screen s,String content) {
+	    	try {
+	    		int keycode = Integer.parseInt(content);
+	    		switch (keycode) {
+					case RemoteControl.REMOTEKEY_ENTER :
+					break;
+					case RemoteControl.REMOTEKEY_RED :
+						break;
+					case RemoteControl.REMOTEKEY_GREEN :
+						break;
+					case RemoteControl.REMOTEKEY_YELLOW :
+						break;
+					case RemoteControl.REMOTEKEY_BLUE :
+						toggleMainScreenInfo(s);
+						break;
+					case RemoteControl.REMOTEKEY_RIGHT :
+						gotoNextChapter(s);
+						break;
+					case RemoteControl.REMOTEKEY_LEFT :
+						gotoPrevChapter(s);
+						break;
+					case RemoteControl.REMOTEKEY_UP :
+						showMainScreenSlider(s);
+						break;
+					case RemoteControl.REMOTEKEY_DOWN :
+						hideMainScreenSlider(s);
+						break;
+	    		}
+	    	} catch(Exception e) {
+	    		log("illigal keyPressed");
+	    	}
+	    }
+	 
+	    private void gotoNextChapter(Screen s) {
+			FsNode chapternode = timeline.getCurrentFsNode("chapter", currentTime);
+			if (chapternode!=null) {
+				// lets seek to its end time
+				float st = chapternode.getStarttime();
+				float du = chapternode.getDuration();
+				int newpos = (int)((st+du)/1000);
+				log("Pos="+newpos+1);
+				this.componentmanager.getComponent("hbbtvvideo").put("app", "seek("+ (newpos+1) +")");
+			}
+	    }
+	    
+	    private void gotoPrevChapter(Screen s) {
+			FsNode chapternode = timeline.getCurrentFsNode("chapter", currentTime);
+			if (chapternode!=null) {
+				this.componentmanager.getComponent("hbbtvvideo").put("app", "seek("+ 0 +")");
+			}
+	    }
+	 
+	    private void toggleMainScreenInfo(Screen s) {
+	    	Object o = s.getProperty("infoactive");
+	    	if (o!=null) {
+	    		if (((String)o).equals("true")) {
+	    			s.setProperty("infoactive","false");	
+	    			this.componentmanager.getComponent("mainscreeninfo").put("app", "hide()");
+	    		} else {
+	    			s.setProperty("infoactive","true");	
+	    			this.componentmanager.getComponent("mainscreeninfo").put("app", "show()");	
+	    		}
+	    	} else {
+    			s.setProperty("infoactive","false");	
+    			this.componentmanager.getComponent("mainscreeninfo").put("app", "hide()");
+	    	}
+	    }
+	    
+	    private void showMainScreenSlider(Screen s) {
+	    	this.componentmanager.getComponent("mainscreenslider").put("app", "show()");	
+	    }
+	    
+	    private void hideMainScreenSlider(Screen s) {
+	    	this.componentmanager.getComponent("mainscreenslider").put("app", "hide()");	
+	    }
+
 }

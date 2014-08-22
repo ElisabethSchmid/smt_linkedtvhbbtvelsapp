@@ -114,6 +114,7 @@ function Video(options) {
 		var time = eval(content);
 		if (time>1) time = time - 1 ;
 		myPlayer.currentTime = time;
+		eddie.log("T="+time);
 		eddie.putLou('notification','show(seek '+Math.floor(time)+')');
 	}
 

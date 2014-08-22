@@ -39,39 +39,17 @@ function Mainscreeninfo(options) {
 		var content = msg.content;
 		for(var i=0; i<command.length; i++) {
 			switch(command[i]) { 
-				case 'showMainScreenInfo':
-					self.showMainScreenInfo();
+				case 'show':
+					$('#mainscreeninfo').css('display','inline');
 					break;
-				case 'hideMainScreenInfo':
-					self.hideMainScreenInfo();
+				case 'hide':
+					$('#mainscreeninfo').css('display','none');
 					break;
-				case 'html':
-	  				self.putContent(content);
-	  				break; 
 				default:
 					alert('unhandled msg in hbbtvvideo.html : '+msg+' ('+command+','+content+')'); 
 			}
 		}
 	}
 	
-	self.showMainScreenInfo = function() {
-		$("#mainScreenInfo").show();
-		//eddie.putLou('notification','show(showMainScreenInfo)');
-	}
-	
-	self.hideMainScreenInfo = function() {
-		$("#mainScreenInfo").hide();
-		//eddie.putLou('notification','show(hideMainScreenInfo)');
-	}
-	
-	self.putContent = function(content){
-		var contentId = $(content).attr('id');
-		$('#'+ contentId).empty();
-		$('#'+ contentId).html(content);
-		//eddie.putLou('notification','show(hideMainScreenInfo)');
-	}
-	
-	//eddie.putLou('notification','show(displaymainscreentext)');
-	eddie.putLou("","displaymainscreentext()");
 	return self;
 }
