@@ -48,7 +48,8 @@ public class MainSlider {
 			body+="</div>";	
 			i++;
 		}
-		app.setContentAllScreensWithRole("mainscreen", "mainscreenslider",body);
+		s.setContent("mainscreenslider",body);
+		//app.setContentAllScreensWithRole("mainscreen", "mainscreenslider",body);
 
 	}
 

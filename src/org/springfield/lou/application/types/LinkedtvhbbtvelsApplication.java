@@ -31,6 +31,7 @@ import java.util.List;
 import org.springfield.lou.application.Html5Application;
 import org.springfield.lou.application.components.BasicComponent;
 import org.springfield.lou.application.components.ComponentInterface;
+import org.springfield.lou.application.types.demolinkedtv.AppLanguage;
 import org.springfield.lou.application.types.demolinkedtv.MainCurrent;
 import org.springfield.lou.application.types.demolinkedtv.MainSlider;
 import org.springfield.lou.application.types.demolinkedtv.Slider;
@@ -76,14 +77,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	private boolean hbbtvMode = false; 
 	
 	
-	String language = "de"; //change language to something else then de to load default
-	String whoSliderName = "WHO";
-	String whatSliderName = "WHAT";
-	String whereSliderName = "WHERE";
-	String chapterSliderName = "CHAPTER";
-	String bookmarkSliderName = "BOOKMARK";
-	String sharedSliderName = "SHARED";
-	String joinedSliderName = "JOINED";
+	private String language = "de"; //change language to something else then de to load default
 
 	
 	public LinkedtvhbbtvelsApplication(String id) {
@@ -173,51 +167,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			//TODO els
 			loadContent(s, "overlay"); // this is just for testing, remove it later!
 			this.componentmanager.getComponent("overlay").put("app", "showQRCode()");
-			String fileContent = "";
-			
-			if(language.equals("de")){
-				fileContent = FsFileReader.getFileContent(this, "displayText", "displayText"+File.separator+"text_de.js");
-			} else if(language.equals("en")){
-				fileContent = FsFileReader.getFileContent(this, "displayText", "displayText")+File.separator+"text_en.js";
-			} else {
-				// TODO els
-				fileContent = FsFileReader.getFileContent(this, "displayText", "displayText")+File.separator+"defaultText.js";
-				// end els TODO
-			}
-			if(fileContent.length() > 0){
-				String[] defaultTextParameterRows = fileContent.split("\n");
-				HashMap <String,String> defaultTextParameters = new HashMap<String,String>();
-				for (String row : defaultTextParameterRows) {
-					System.out.println(row);
-					String [] defaultTextParameterLine = row.split("=");
-					defaultTextParameters.put(defaultTextParameterLine[0],defaultTextParameterLine[1]);
-				}
-				System.out.println("map:" + defaultTextParameters.toString());
-				
-				whoSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.who");
-				whatSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.what");
-				whereSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.where");
-				chapterSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.chapter");
-				joinedSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.bookmark");
-				bookmarkSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.shared");
-				sharedSliderName = defaultTextParameters.get("LinkedtvhbbtvApplication.joined");
-				
-				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.who"));
-				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.what"));
-				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.where"));
-				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.chapter"));
-				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.bookmark"));
-				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.shared"));
-				System.out.println("els: " + defaultTextParameters.get("LinkedtvhbbtvApplication.joined"));
-			} //else {
-//		whoSliderName = "WER";
-//		whatSliderName = "WAS";
-//		whereSliderName = "WO";
-//		chapterSliderName = "KAPITEL";
-//		joinedSliderName = "VERBUNDEN";
-//		bookmarkSliderName = "LESEZEICHEN";
-//		sharedSliderName = "GETEILT";
-//	}
+			AppLanguage.loadLanguage(this, language);
 				
 	}
 	
@@ -600,21 +550,21 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	if (content.equals("screens_episode")) { 
 		//better Solution eg. read names from properties-File?? Source/externalize Strings
 		s.setContent("content","");
-		addSlider(s, "content", "whoslider", whoSliderName);//Name is being used
-		addSlider(s, "content", "whatslider", whatSliderName);
-		addSlider(s, "content", "whereslider", whereSliderName);
-		addSlider(s, "content", "chapterslider", chapterSliderName);
+		addSlider(s, "content", "whoslider", AppLanguage.getWhoSliderName());//Name is being used
+		addSlider(s, "content", "whatslider", AppLanguage.getWhatSliderName());
+		addSlider(s, "content", "whereslider", AppLanguage.getWhereSliderName());
+		addSlider(s, "content", "chapterslider", AppLanguage.getChapterSliderName());
 		loadContent(s, "sliderevents");
 	} else if (content.equals("screens_overview")) {
 		s.setContent("content","");
 	} else if (content.equals("screens_bookmarks")) {
 		s.setContent("content","");
-		addSlider(s, "content", "bookmarkslider", bookmarkSliderName);
-		addSlider(s, "content", "sharedslider", sharedSliderName);	
+		addSlider(s, "content", "bookmarkslider", AppLanguage.getBookmarkSliderName());
+		addSlider(s, "content", "sharedslider", AppLanguage.getSharedSliderName());	
 		loadContent(s, "sliderevents");
 	} else if (content.equals("screens_social")) {
 		s.setContent("content","");
-		addSlider(s, "content", "joinedslider", joinedSliderName);	
+		addSlider(s, "content", "joinedslider", AppLanguage.getJoinedSliderName());	
 		loadContent(s, "sliderevents");
 	}
 }
