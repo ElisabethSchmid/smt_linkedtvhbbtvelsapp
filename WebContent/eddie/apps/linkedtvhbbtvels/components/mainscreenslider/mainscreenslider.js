@@ -2,9 +2,6 @@ function Mainscreenslider(options) {
 	var self = {};
 	var settings = {};
 	$.extend(settings, options);
-	var qrCode = document.getElementById("mainScreenInfo");
-	
-	setInterval(function() { eddie.putLou('','displaymainscreentext()'); }, 1000);
 	
 	self.putMsg = function(msg){
 	

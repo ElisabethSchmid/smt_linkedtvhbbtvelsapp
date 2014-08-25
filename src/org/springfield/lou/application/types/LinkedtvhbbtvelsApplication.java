@@ -173,8 +173,8 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "play()");
 		}
 			//TODO els
-			loadContent(s, "overlay"); // this is just for testing, remove it later!
-			this.componentmanager.getComponent("overlay").put("app", "showQRCode()");
+			//loadContent(s, "overlay"); // this is just for testing, remove it later!
+			//this.componentmanager.getComponent("overlay").put("app", "showQRCode()");
 			AppLanguage.loadLanguage(this, language);
 				
 	}
@@ -468,6 +468,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		
 		
 		//TODO els
+		/*
 		int qrCodeDisplayTime = 20000;
 		if(currentTime >= qrCodeDisplayTime){
 			ComponentInterface compMainScreenOverlay = getComponentManager().getComponent("overlay");
@@ -475,6 +476,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 				this.componentmanager.getComponent("overlay").put("app", "hideQRCode()");
 			}
 		}
+		*/
 		//end els TODO
 
 		
@@ -899,7 +901,8 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 				    	if (onscreen==null) {
 				    		showMainSlider(s);
 				    	} else {
-				    		showMainCard(s);	
+				    		showMainCard(s);
+				    		fillMainCard(s);
 				    	}
 						break;
 					case RemoteControl.REMOTEKEY_DOWN :
@@ -1006,7 +1009,10 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	    	int now = (int)(new Date().getTime()/1000);
 	    	int old = getScreenPropertyInt(s,"mainmenulastuse");
 	    	if ((now-old)>10) {
-	    		hideMainSlider(s);
+				Object onscreen = s.getProperty("cardonscreen");
+		    	if (onscreen==null) {
+		    		hideMainSlider(s);
+		    	}
 	    	}
 	
 	    }
@@ -1025,12 +1031,17 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	    private void hideMainSlider(Screen s) {
 	    	s.putMsg("mainscreenslider","app","hide()");
 	    	s.setProperty("slideronscreen",null);
+			Object onscreen = s.getProperty("cardonscreen");
+	    	if (onscreen!=null) {
+	    		hideMainCard(s);
+	    	}
 	    }
 	    
 	    private void showMainSlider(Screen s) {
 	    	s.putMsg("mainscreenslider","app","show()");
 	    	s.setProperty("slideronscreen","true");
 	    }
+	    
 
 	    private void showMainCard(Screen s) {
 	    	s.putMsg("mainscreencard","app","show()");
@@ -1041,5 +1052,13 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	    	s.putMsg("mainscreencard","app","hide()");
 	    	s.setProperty("cardonscreen",null);
 	    }
+	    
+	    private void fillMainCard(Screen s) {
+			FsNode node = timeline.getFsNodeById("chapter",getScreenPropertyInt(s, "selid"));
+	    	String body = "second ttry";
+	    	body+="title="+node.getProperty("title");
+	    	s.setContent("mainscreencard",body);
+	    }
+	    
 
 }
