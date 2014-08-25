@@ -420,7 +420,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			body += "<div>";
 			body += "<center>";
 			body += "<p id=\"info_description\">"+description+"</p>";
-			body += "<p class=\"info_text_1\">FIND OUT MORE</p>";
+			body += "<p class=\"info_text_1\">"+ AppLanguage.getFindOutMore() +"</p>";
 			body += "<div>";
 			for (FsNode enrichment : enrichments) {
 				body += "<a href=\""+enrichment.getProperty("locator")+"\">";
@@ -430,7 +430,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 				}
 				body += "</a><br/>";
 			}
-			body += "<p class=\"info_text_2\">Rotate your screen to read more</p>";
+			body += "<p class=\"info_text_2\">"+ AppLanguage.getRotateScreen()+"/p>";
 			body += "</div>";
 			body += "</center>";
 			body += "</div>";
@@ -921,6 +921,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	 
 	 
 	    private void selectNextChapter(Screen s) {
+	    	int nrOfDispChapters = 12;
 	    	Object onscreen = s.getProperty("slideronscreen");
 	    	if (onscreen==null) {
 	    		s.putMsg("mainscreenslider","app","show()");
@@ -937,8 +938,13 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	    		int pos = Integer.parseInt((String)o);
 	    		s.setProperty("selid", ""+(pos+1));
 	    		log(""+(pos+1));
-				MainSlider.setOnScreen(this,s,timeline,(int)currentTime,""+(pos+1),true);
+	    		//if((pos+1)%nrOfDispChapters){
+		    	//}
+		    	MainSlider.setOnScreen(this,s,timeline,(int)currentTime,""+(pos+1),true);
+		    	
 	    	}
+	    	
+	    	
 	    }
 	    
 	    private void selectPrevChapter(Screen s) {
@@ -962,6 +968,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 				MainSlider.setOnScreen(this,s,timeline,(int)currentTime,""+(pos-1),true);
 	    	}
 	    }
+	    
 	 
 	    private void gotoChapter(Screen s) {
 	    	Object o = s.getProperty("selid");
@@ -1054,9 +1061,53 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	    }
 	    
 	    private void fillMainCard(Screen s) {
-			FsNode node = timeline.getFsNodeById("chapter",getScreenPropertyInt(s, "selid"));
-	    	String body = "second ttry";
-	    	body+="title="+node.getProperty("title");
+	    	
+			FsNode node = null;
+			Object o = s.getProperty("selid");
+			if(o == null){
+				s.setProperty("selid", "1");
+			}
+			int nodeId = getScreenPropertyInt(s, "selid");
+			node = timeline.getFsNodeById("chapter", nodeId);
+			
+			FSList enrichmentsList = episode.getEnrichmentsFromAnnotation(node); // are chapterannotation treated the same ??
+			List<FsNode> enrichments = enrichmentsList.getNodes();
+	    	
+			
+	    	//int pos = Integer.parseInt((String)o);
+			//body += "<p id=\"infoscreen_title\" class=\"info_text_1\">"+entity+"</p>";
+			String body = "";
+			body += "<div class=\"infoscreen_div_centered\">";
+			body += "<p id=\"maincard_title\" class=\"maincard_text_1\">";
+			body += AppLanguage.getChapterSliderName();
+	    	body += " ";
+	    	body += nodeId;
+			body += ": "+node.getProperty("title");
+			body += "</p>";
+			body+="<p class=\"maincard_timecode\">" + AppLanguage.getTime() +": " +getTimeCodeString(node.getStarttime()/1000) + "-"+ getTimeCodeString((node.getStarttime()+node.getDuration())/1000) +"</p>";
+			body += "<p id=\"maincard_description\">";
+			if(node.getProperty("description") != null){//TODO
+				body += node.getProperty("description");//TODO
+				log("Desc: " + node.getProperty("description"));//TODO
+			}
+			body += "</p><div>";
+			for (FsNode enrichment : enrichments) {
+				body += "<a href=\""+enrichment.getProperty("locator")+"\">";
+				body += enrichment.getProperty("type");
+				if (!enrichment.getProperty("source").equals("")) {
+					body += "-"+enrichment.getProperty("source");
+				}
+				body += "</a><br/>";
+			}
+			//body += "<p class=\"info_text_2\">Rotate your screen to read more</p>";
+			body += "</div>";
+			body += "</div>";
+			body += "</div>";
+			//body += "<div class=\"infoscreen_div_centered\">";
+			//body += "<img id=\"infimg\" src=\""+image+"\"/>";
+			//body += "</div>";
+	    	
+		
 	    	s.setContent("mainscreencard",body);
 	    }
 	    

@@ -5,3 +5,6 @@ LinkedtvhbbtvApplication.chapter=CHAPTER
 LinkedtvhbbtvApplication.bookmark=BOOKMARK
 LinkedtvhbbtvApplication.shared=SHARED
 LinkedtvhbbtvApplication.joined=JOINED
+LinkedtvhbbtvApplication.time=TIME
+LinkedtvhbbtvApplication.findOutMore=FIND OUT MORE
+LinkedtvhbbtvApplication.rotateScreen=Rotate your screen to read more

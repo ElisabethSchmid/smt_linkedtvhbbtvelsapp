@@ -5,3 +5,6 @@ LinkedtvhbbtvApplication.chapter=KAPITEL
 LinkedtvhbbtvApplication.bookmark=LESEZEICHEN
 LinkedtvhbbtvApplication.shared=GETEILT
 LinkedtvhbbtvApplication.joined=VERBUNDEN
+LinkedtvhbbtvApplication.time=ZEIT
+LinkedtvhbbtvApplication.findOutMore=FINDEN SIE MEHR HERAUS
+LinkedtvhbbtvApplication.rotateScreen=Rotieren Sie den Bildschirm um weiter zu lesen
