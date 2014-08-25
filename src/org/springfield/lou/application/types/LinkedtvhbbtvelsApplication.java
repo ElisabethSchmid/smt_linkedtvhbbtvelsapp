@@ -24,6 +24,7 @@ package org.springfield.lou.application.types;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -103,6 +104,8 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	 */
 	public void onNewScreen(Screen s) {		
 		String fixedrole = s.getParameter("role");
+		
+		
 		if (episode == null) {
 			episode = new Episode(s.getParameter("id"));
 		}
@@ -156,6 +159,11 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		// switch between HTML5 version and HbbTV version
 		if (hbbtvMode == false) {
 			loadContent(s, "video");
+			loadContent(s, "desktopmanager");
+			loadContent(s, "mainscreeninfo");
+			loadContent(s, "mainscreencard");
+			loadContent(s, "mainscreenslider");
+    		
 			this.componentmanager.getComponent("video").put("app", "setVideo("+ episode.getStreamUri() +")");
 			this.componentmanager.getComponent("video").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 		} else {
@@ -447,6 +455,10 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			initTimeLine();				
 		}	
 		
+		// timeout system for menu
+		checkAutoHideMenu(s);
+		
+		
 		String[] t = content.split(":");
 		long ms = Long.parseLong(t[0])*1000;
 		int newChapter = currentChapter;
@@ -467,8 +479,12 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 
 		
 		MainCurrent.setOnScreen(this,s,timeline,(int)currentTime);
-		
-		MainSlider.setOnScreen(this,s,timeline,(int)currentTime);
+		Object o = s.getProperty("selid");
+		if (o==null) {
+			MainSlider.setOnScreen(this,s,timeline,(int)currentTime,null,false);
+		} else {
+			MainSlider.setOnScreen(this,s,timeline,(int)currentTime,(String)o,false);	
+		}
 		
 		ComponentInterface comp = getComponentManager().getComponent("chapterslider");
 		if (comp!=null) {
@@ -754,11 +770,13 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 		if (hbbtvMode == false) {
 			this.componentmanager.getComponent("video").put("app", "started()");
 		} else {
+			log("HBBTV");
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "started()");
 			
 			//TODO els
 			loadContent(s, "hbbtvmanager");
 			loadContent(s, "mainscreeninfo");
+			loadContent(s, "mainscreencard");
 			loadContent(s, "mainscreenslider");
 			//this.componentmanager.getComponent("mainscreeninfo").put("app", "showMainScreenInfo()");
 		}
@@ -789,29 +807,6 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 		gain.player_stop(s.getId(), episode.getMediaResourceId(), videoTime);
 	}
 	
-	/*private void timeUpdate(String args){
-		System.out.println("timeUpdate(" + args + ")");
-		String[] arguments = args.split(",");
-		int time = (int) Double.parseDouble(arguments[0]);
-		boolean scrub = false;
-		if(arguments.length > 1){
-			scrub = Boolean.parseBoolean(arguments[1]);
-		}
-		
-		timeUpdate(time, scrub);
-	}*/
-	
-	/*private void scrubStart(){
-		this.project.set("scrubbing", true);
-	}
-	
-	private void scrubStop(){
-		this.project.set("scrubbing", false);
-	}
-	
-	private void timeUpdate(int time, boolean scrub){
-		this.project.set("currentTime", time);
-	}*/
 	
 	/**
 	 * Loading fake users for now
@@ -861,10 +856,18 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	}
 	
 	 public void keypressed(Screen s,String content) {
+		 	// reset shutdown timer
+		 	setScreenPropertyInt(s,"mainmenulastuse", (int)(new Date().getTime()/1000));
+		 
 	    	try {
 	    		int keycode = Integer.parseInt(content);
 	    		switch (keycode) {
 					case RemoteControl.REMOTEKEY_ENTER :
+						Object onscreen = s.getProperty("cardonscreen");
+				    	if (onscreen!=null) {
+				    		hideMainCard(s);
+				    	}
+						gotoChapter(s);
 					break;
 					case RemoteControl.REMOTEKEY_RED :
 						break;
@@ -876,16 +879,36 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 						toggleMainScreenInfo(s);
 						break;
 					case RemoteControl.REMOTEKEY_RIGHT :
-						gotoNextChapter(s);
+						onscreen = s.getProperty("cardonscreen");
+				    	if (onscreen==null) {
+				    		selectNextChapter(s);
+				    	} else {
+				    		hideMainCard(s);
+				    	}
 						break;
 					case RemoteControl.REMOTEKEY_LEFT :
-						gotoPrevChapter(s);
+						onscreen = s.getProperty("cardonscreen");
+				    	if (onscreen==null) {
+				    		selectPrevChapter(s);
+				    	} else {
+				    		hideMainCard(s);
+				    	}
 						break;
 					case RemoteControl.REMOTEKEY_UP :
-						showMainScreenSlider(s);
+				    	onscreen = s.getProperty("slideronscreen");
+				    	if (onscreen==null) {
+				    		showMainSlider(s);
+				    	} else {
+				    		showMainCard(s);	
+				    	}
 						break;
 					case RemoteControl.REMOTEKEY_DOWN :
-						hideMainScreenSlider(s);
+				    	onscreen = s.getProperty("cardonscreen");
+				    	if (onscreen==null) {
+				    		hideMainSlider(s);
+				    	} else {
+				    		hideMainCard(s);
+				    	}
 						break;
 	    		}
 	    	} catch(Exception e) {
@@ -893,24 +916,74 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	    	}
 	    }
 	 
-	    private void gotoNextChapter(Screen s) {
-			FsNode chapternode = timeline.getCurrentFsNode("chapter", currentTime);
+	 
+	    private void selectNextChapter(Screen s) {
+	    	Object onscreen = s.getProperty("slideronscreen");
+	    	if (onscreen==null) {
+	    		s.putMsg("mainscreenslider","app","show()");
+	    		s.setProperty("slideronscreen","true");
+	    	}
+	    	
+	    	
+	    	Object o = s.getProperty("selid");
+	    	if (o==null) {	
+	    		log("1");
+	    		s.setProperty("selid", "1");
+				MainSlider.setOnScreen(this,s,timeline,(int)currentTime,"1",true);
+	    	} else {
+	    		int pos = Integer.parseInt((String)o);
+	    		s.setProperty("selid", ""+(pos+1));
+	    		log(""+(pos+1));
+				MainSlider.setOnScreen(this,s,timeline,(int)currentTime,""+(pos+1),true);
+	    	}
+	    }
+	    
+	    private void selectPrevChapter(Screen s) {
+	    	Object onscreen = s.getProperty("slideronscreen");
+	    	if (onscreen==null) {
+	    		s.putMsg("mainscreenslider","app","show()");
+	    		s.setProperty("slideronscreen","true");
+	    	}
+	    	
+	    	
+	    	Object o = s.getProperty("selid");
+	    	if (o==null) {	
+	    		log("1");
+	    		s.setProperty("selid", "1");
+				MainSlider.setOnScreen(this,s,timeline,(int)currentTime,"1",true);
+	    	} else {
+	    		int pos = Integer.parseInt((String)o);
+	    		if (pos<2) return;
+	    		s.setProperty("selid", ""+(pos-1));
+	    		log(""+(pos-1));
+				MainSlider.setOnScreen(this,s,timeline,(int)currentTime,""+(pos-1),true);
+	    	}
+	    }
+	 
+	    private void gotoChapter(Screen s) {
+	    	Object o = s.getProperty("selid");
+	    	if (o==null) return;
+	    	
+    		hideMainSlider(s);
+	    
+	    	FsNode chapternode = null;
+			try {
+				chapternode = timeline.getFsNodeById("chapter",Integer.parseInt((String)o));
+			} catch(Exception e) {}
+
 			if (chapternode!=null) {
 				// lets seek to its end time
-				float st = chapternode.getStarttime();
-				float du = chapternode.getDuration();
-				int newpos = (int)((st+du)/1000);
-				log("Pos="+newpos+1);
-				this.componentmanager.getComponent("hbbtvvideo").put("app", "seek("+ (newpos+1) +")");
+				float st = (chapternode.getStarttime()/1000)+1;
+				if (s.getCapabilities().getDeviceMode()==s.getCapabilities().MODE_HBBTV) {
+					s.putMsg("hbbtvvideo","app","seek("+ st +")");
+					//this.componentmanager.getComponent("hbbtvvideo").put("app", "seek("+ st +")");
+				} else {
+					s.putMsg("video","app","seek("+ st +")");
+					//this.componentmanager.getComponent("video").put("app", "seek("+ st +")");
+				}
 			}
 	    }
 	    
-	    private void gotoPrevChapter(Screen s) {
-			FsNode chapternode = timeline.getCurrentFsNode("chapter", currentTime);
-			if (chapternode!=null) {
-				this.componentmanager.getComponent("hbbtvvideo").put("app", "seek("+ 0 +")");
-			}
-	    }
 	 
 	    private void toggleMainScreenInfo(Screen s) {
 	    	Object o = s.getProperty("infoactive");
@@ -928,12 +1001,45 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	    	}
 	    }
 	    
-	    private void showMainScreenSlider(Screen s) {
-	    	this.componentmanager.getComponent("mainscreenslider").put("app", "show()");	
+	    
+	    private void checkAutoHideMenu(Screen s) {
+	    	int now = (int)(new Date().getTime()/1000);
+	    	int old = getScreenPropertyInt(s,"mainmenulastuse");
+	    	if ((now-old)>10) {
+	    		hideMainSlider(s);
+	    	}
+	
 	    }
 	    
-	    private void hideMainScreenSlider(Screen s) {
-	    	this.componentmanager.getComponent("mainscreenslider").put("app", "hide()");	
+	    public void setScreenPropertyInt(Screen s,String name,int value) {
+	    	s.setProperty(name, ""+value);
+	    }
+	    
+	    public int getScreenPropertyInt(Screen s,String name) {
+	    	try {
+	    		return Integer.parseInt((String)s.getProperty(name));
+	    	} catch(Exception e) {}
+	    	return -1;
+	    }
+	    
+	    private void hideMainSlider(Screen s) {
+	    	s.putMsg("mainscreenslider","app","hide()");
+	    	s.setProperty("slideronscreen",null);
+	    }
+	    
+	    private void showMainSlider(Screen s) {
+	    	s.putMsg("mainscreenslider","app","show()");
+	    	s.setProperty("slideronscreen","true");
+	    }
+
+	    private void showMainCard(Screen s) {
+	    	s.putMsg("mainscreencard","app","show()");
+	    	s.setProperty("cardonscreen","true");
+	    }
+	    
+	    private void hideMainCard(Screen s) {
+	    	s.putMsg("mainscreencard","app","hide()");
+	    	s.setProperty("cardonscreen",null);
 	    }
 
 }

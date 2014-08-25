@@ -9,7 +9,7 @@ import org.springfield.lou.screen.Screen;
 
 public class MainSlider {
 
-	public static void setOnScreen(LinkedtvhbbtvelsApplication app,Screen s,FsTimeLine timeline,int curtime) {
+	public static void setOnScreen(LinkedtvhbbtvelsApplication app,Screen s,FsTimeLine timeline,int curtime,String selpos,boolean forcedraw) {
 		String curid = null;
 		FsNode chapternode = timeline.getCurrentFsNode("chapter", curtime);
 		if (chapternode!=null) {
@@ -18,17 +18,26 @@ public class MainSlider {
     	Object o = s.getProperty("chapteractive");
     	if (o!=null) {
     		String oldchapter = (String)o;
-    		if (oldchapter.equals(curid)) return; // nothing has changed don't send
+    		if (!forcedraw && oldchapter.equals(curid)) return; // nothing has changed don't send
     	} 
 		s.setProperty("chapteractive",curid);
 		app.log("slider update "+curid);
 		String body = "";
 		int i = 1;
+		String selid = null;
+		try {
+			FsNode n = timeline.getFsNodeById("chapter",Integer.parseInt(selpos));
+			if (n!=null) selid = n.getId();
+		} catch(Exception e) {}
+		
 		for(Iterator<FsNode> iter = timeline.getFsNodesByType("chapter"); iter.hasNext(); ) {
 			FsNode node = (FsNode)iter.next();
 			String title = node.getProperty("title");
 			String thisid = node.getId();
-			if (curid!=null && curid.equals(thisid)) {
+			if (selid!=null && selid.equals(thisid)) {
+				body += "<div class=\"mainsliderblockselected chapter\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
+				body += "data-uid=\""+node.getProperty("uid")+"\" data-entity=\""+title+"\" id=\"chapter_block"+(i)+"\">";
+			} else if (curid!=null && curid.equals(thisid)) {
 				body += "<div class=\"mainsliderblockactive chapter\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 				body += "data-uid=\""+node.getProperty("uid")+"\" data-entity=\""+title+"\" id=\"chapter_block"+(i)+"\">";
 			} else {
@@ -49,8 +58,6 @@ public class MainSlider {
 			i++;
 		}
 		s.setContent("mainscreenslider",body);
-		//app.setContentAllScreensWithRole("mainscreen", "mainscreenslider",body);
-
 	}
 
 }

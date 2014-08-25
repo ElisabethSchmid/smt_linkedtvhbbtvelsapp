@@ -19,9 +19,7 @@
 * You should have received a copy of the GNU General Public License
 * along with smt_trafficlightoneapp.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-
-function Mainscreeninfo(options) {
+function Mainscreencard(options) {
 	var self = {};
 	var settings = {};
 	$.extend(settings, options);
@@ -37,13 +35,13 @@ function Mainscreeninfo(options) {
 		for(var i=0; i<command.length; i++) {
 			switch(command[i]) { 
 				case 'show':
-					$('#mainscreeninfo').css('display','inline');
+					$('#mainscreencard').css('display','inline');
 					break;
 				case 'hide':
-					$('#mainscreeninfo').css('display','none');
+					$('#mainscreencard').css('display','none');
 					break;
 				default:
-					alert('unhandled msg in hbbtvvideo.html : '+msg+' ('+command+','+content+')'); 
+					alert('unhandled msg in mainscreencard.html : '+msg+' ('+command+','+content+')'); 
 			}
 		}
 	}
