@@ -35,6 +35,7 @@ import org.springfield.lou.application.components.ComponentInterface;
 import org.springfield.lou.application.types.demolinkedtv.AppLanguage;
 import org.springfield.lou.application.types.demolinkedtv.MainCurrent;
 import org.springfield.lou.application.types.demolinkedtv.MainSlider;
+import org.springfield.lou.application.types.demolinkedtv.EpisodePage;
 import org.springfield.lou.application.types.demolinkedtv.Slider;
 import org.springfield.fs.*;
 import org.springfield.hbbtvsupport.RemoteControl;
@@ -76,7 +77,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	private int currentChapter = -1;
 	private long currentTime = 0l;
 	private boolean hbbtvMode = false; 
-	
+	private boolean episodeSelected = false; //TODO els
 	
 	private String language = "de"; //change language to something else then de to load default
 
@@ -102,9 +103,9 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	 * 
 	 * @param s - screen
 	 */
-	public void onNewScreen(Screen s) {		
-		String fixedrole = s.getParameter("role");
+	public void onNewScreen(Screen s) {
 		
+		String fixedrole = s.getParameter("role");
 		
 		if (episode == null) {
 			episode = new Episode(s.getParameter("id"));
@@ -120,6 +121,33 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		loadStyleSheet(s,"animate");
 		loadStyleSheet(s, dstyle);
 		
+		
+//		if(episodeSelected == false){//needs to be changed to true when episode is selected
+//		ArrayList <Episode> episodes = new ArrayList <Episode> ();
+//		episodes.add(0,episode);
+//		episodes.add(1,episode);
+//		episodes.add(2,episode);
+//		episodes.add(3,episode);
+//		episodes.add(4,episode);
+//		episodes.add(5,episode);
+//		episodes.add(6,episode);
+//		
+//		loadContent(s,"episodeslider");
+//		
+//		
+//		Object oEp = s.getProperty("selEpId");
+//		if (oEp==null) {
+//			s.setProperty("selEpId", 0);
+//			oEp = s.getProperty("selEpId");
+//		}
+//		EpisodePage.setOnScreen(this,s,episodes,(String)oEp);	
+//	
+////		if (hbbtvMode == false) {
+////			loadContent(s, "desktopmanager");
+////		}
+//	} else {
+	//}
+		
 		if (caps.getDeviceMode() == caps.MODE_HBBTV) {
 			// this is the HbbTV main screen
 			this.hbbtvMode = true;
@@ -128,7 +156,9 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			currentTime = 0l;	
 			
 			s.setRole("mainscreen");
-			loadMainScreen(s);			
+			
+
+			loadMainScreen(s);	
 		} else if (screenmanager.hasRole("mainscreen") && (fixedrole == null || !fixedrole.equals("mainscreen"))) {
 			// Do we already have a screen in the application that claims to be a mainscreen ?
 			System.out.println("Second screen");
@@ -157,21 +187,25 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	 */
 	private void loadMainScreen(Screen s) {
 		// switch between HTML5 version and HbbTV version
+		
+
 		if (hbbtvMode == false) {
 			loadContent(s, "video");
 			loadContent(s, "desktopmanager");
 			loadContent(s, "mainscreeninfo");
 			loadContent(s, "mainscreencard");
 			loadContent(s, "mainscreenslider");
-    		
+    		//TODO els  s.setContent("video","setVideo("+ episode.getStreamUri() +")");??
 			this.componentmanager.getComponent("video").put("app", "setVideo("+ episode.getStreamUri() +")");
 			this.componentmanager.getComponent("video").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 		} else {
+			
 			loadContent(s, "hbbtvvideo");
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ episode.getStreamuri(3) +")");
 			//this.componentmanager.getComponent("hbbtvvideo").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "play()");
 		}
+		
 			//TODO els
 			//loadContent(s, "overlay"); // this is just for testing, remove it later!
 			//this.componentmanager.getComponent("overlay").put("app", "showQRCode()");
@@ -186,7 +220,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	 */
 	private void loadSecondScreen(Screen s) {		
 		s.setRole("secondaryscreen");
-		loadContent(s, "login");
+//		loadContent(s, "login");
 		loadContent(s, "tablet");
 		loadContent(s, "droparea");		
 		loadContent(s, "signal");
@@ -478,7 +512,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		}
 		*/
 		//end els TODO
-
+		
 		
 		MainCurrent.setOnScreen(this,s,timeline,(int)currentTime);
 		Object o = s.getProperty("selid");
@@ -487,6 +521,8 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		} else {
 			MainSlider.setOnScreen(this,s,timeline,(int)currentTime,(String)o,false);	
 		}
+		
+		
 		
 		ComponentInterface comp = getComponentManager().getComponent("chapterslider");
 		if (comp!=null) {
@@ -549,6 +585,12 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		for (FsNode annotation : annotations) {
 			GAINObjectEntity entity = new GAINObjectEntity(annotation);
 			entityList.add(entity);
+		}
+		
+		if(episode.getDuration() == ms){
+			log("epDuration: " + episode.getDuration());
+			s.setProperty("selid", 1);
+			gotoChapter(s);
 		}
 		
 		gain.updateEntities(entityList);
@@ -847,7 +889,10 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 		}
 		
 		timeline.addNodes(results.getAllNodes());
+		
 	}
+	
+
 	
 	private void handleInfoBlockFinished(Screen s, String params) {
 		System.out.println("Received info block finished with following params "+params);
@@ -921,7 +966,8 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	 
 	 
 	    private void selectNextChapter(Screen s) {
-	    	int nrOfDispChapters = 12;
+	    	int nrOfDispChapters = episode.getChapters().size();
+	    	log("els nrOfDispChapters: "+ nrOfDispChapters);
 	    	Object onscreen = s.getProperty("slideronscreen");
 	    	if (onscreen==null) {
 	    		s.putMsg("mainscreenslider","app","show()");
@@ -936,11 +982,18 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 				MainSlider.setOnScreen(this,s,timeline,(int)currentTime,"1",true);
 	    	} else {
 	    		int pos = Integer.parseInt((String)o);
-	    		s.setProperty("selid", ""+(pos+1));
-	    		log(""+(pos+1));
+	    		if (pos>=nrOfDispChapters) {
+	    			pos = 12; //TODO
+	    			s.setProperty("selid", ""+pos);
+	    			MainSlider.setOnScreen(this,s,timeline,(int)currentTime,""+pos,true);
+	    		}else{
+	    			s.setProperty("selid", ""+(pos+1));
+	    			log(""+(pos+1));
+	    			MainSlider.setOnScreen(this,s,timeline,(int)currentTime,""+(pos+1),true);
+	    		}
 	    		//if((pos+1)%nrOfDispChapters){
-		    	//}
-		    	MainSlider.setOnScreen(this,s,timeline,(int)currentTime,""+(pos+1),true);
+		    	
+		    	
 		    	
 	    	}
 	    	
@@ -974,12 +1027,13 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	    	Object o = s.getProperty("selid");
 	    	if (o==null) return;
 	    	
+	    	s.setProperty("currentChapterNr",o);
     		hideMainSlider(s);
 	    
 	    	FsNode chapternode = null;
 			try {
 				chapternode = timeline.getFsNodeById("chapter",Integer.parseInt((String)o));
-			} catch(Exception e) {}
+			} catch(Exception e) {} 
 
 			if (chapternode!=null) {
 				// lets seek to its end time
@@ -1073,10 +1127,13 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			FSList enrichmentsList = episode.getEnrichmentsFromAnnotation(node); // are chapterannotation treated the same ??
 			List<FsNode> enrichments = enrichmentsList.getNodes();
 	    	
+			FSList annotationsList = episode.getAnnotationsFromChapter(node);
+			List<FsNode> annotations = annotationsList.getNodes();
 			
 	    	//int pos = Integer.parseInt((String)o);
 			//body += "<p id=\"infoscreen_title\" class=\"info_text_1\">"+entity+"</p>";
 			String body = "";
+		
 			body += "<div class=\"infoscreen_div_centered\">";
 			body += "<p id=\"maincard_title\" class=\"maincard_text_1\">";
 			body += AppLanguage.getChapterSliderName();
@@ -1089,6 +1146,18 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			if(node.getProperty("description") != null){//TODO
 				body += node.getProperty("description");//TODO
 				log("Desc: " + node.getProperty("description"));//TODO
+			}else {
+				int annoCount = 0;
+				int maxAnnoToDisplas = 7; //TODO
+				for (FsNode annotation : annotations) {
+					if(annoCount < maxAnnoToDisplas){
+					body += "<p>";
+					body +=  annotation.getProperty("title");
+					body += "</p>";
+					annoCount++;
+					}
+				}
+				
 			}
 			body += "</p><div>";
 			for (FsNode enrichment : enrichments) {
@@ -1103,6 +1172,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			body += "</div>";
 			body += "</div>";
 			body += "</div>";
+			
 			//body += "<div class=\"infoscreen_div_centered\">";
 			//body += "<img id=\"infimg\" src=\""+image+"\"/>";
 			//body += "</div>";

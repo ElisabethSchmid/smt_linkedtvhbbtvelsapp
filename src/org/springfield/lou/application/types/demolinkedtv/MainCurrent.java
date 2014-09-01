@@ -36,12 +36,38 @@ public class MainCurrent {
 		}
 		
 		// chapter
-		FsNode chapternode = timeline.getCurrentFsNode("chapter", curtime);
-		if (chapternode!=null) {
-			s.setContent("mainScreenInfoChapter",AppLanguage.getChapterSliderName() + ": "+chapternode.getProperty("title"));
-		} else {
-			s.setContent("mainScreenInfoChapter", "");
-		}
+		//FsNode chapternode = timeline.getCurrentFsNode("chapter", curtime);
+		//app.log("els chapternode: " + chapternode.asXML());
+		
+		
+		//if (chapternode!=null) {
+//			Object oCurChap = s.getProperty("currentChapterNr");
+//			
+//			int pos = 0;
+//			app.log("chapternode: " + chapternode.getId() + "formerChapternode: " + s.getProperty("curId"));
+//			if (oCurChap==null) {
+//				pos = 1;
+//		    	app.log("els pos: " + pos);
+//		    	s.setProperty("currentChapterNr","" + pos);
+//		    	s.setProperty("curId", chapternode.getId());
+//		    }else {
+//		    	pos = Integer.parseInt((String)oCurChap);
+//		    	if((chapternode.getId() != s.getProperty("curId"))){
+//		    		pos++;
+//		    		app.log("els pos"+ pos);
+//		    		s.setProperty("curId", chapternode.getId());
+//		    		s.setProperty("currentChapterNr", ""+ pos);
+//		    	} else {
+//		    		pos = Integer.parseInt((String)oCurChap);
+//		    		app.log("els pos"+ pos);
+//		    		s.setProperty("curId", chapternode.getId());
+//		    	}
+//		    }
+			//s.setContent("mainScreenInfoChapter",AppLanguage.getChapterSliderName() + ": "+chapternode.getProperty("title"));
+			//s.setContent("mainScreenInfoChapter",AppLanguage.getChapterSliderName() + " "+ pos +": "+chapternode.getProperty("title"));
+//		} else {
+//			s.setContent("mainScreenInfoChapter", "");
+//		}
 		
 	}
 }

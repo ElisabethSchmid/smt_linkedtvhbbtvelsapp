@@ -1,5 +1,6 @@
 package org.springfield.lou.application.types.demolinkedtv;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.springfield.fs.FsNode;
@@ -10,6 +11,7 @@ import org.springfield.lou.screen.Screen;
 public class MainSlider {
 
 	public static void setOnScreen(LinkedtvhbbtvelsApplication app,Screen s,FsTimeLine timeline,int curtime,String selpos,boolean forcedraw) {
+	
 		String curid = null;
 		FsNode chapternode = timeline.getCurrentFsNode("chapter", curtime);
 		if (chapternode!=null) {
@@ -28,7 +30,9 @@ public class MainSlider {
 		try {
 			FsNode n = timeline.getFsNodeById("chapter",Integer.parseInt(selpos));
 			if (n!=null) selid = n.getId();
-		} catch(Exception e) {}
+		} catch(Exception e) {
+			
+		}
 		
 		for(Iterator<FsNode> iter = timeline.getFsNodesByType("chapter"); iter.hasNext(); ) {
 			FsNode node = (FsNode)iter.next();
@@ -48,7 +52,6 @@ public class MainSlider {
 			body+="<img class=\"mainsliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
 			body+="<div class=\"timecode\">"+app.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 			if (title == null) {
-				
 			} else if (title.length()>40) {
 				body+="<div class=\"overlay\"><p>"+title.substring(37)+"...</p></div>";
 			} else {
