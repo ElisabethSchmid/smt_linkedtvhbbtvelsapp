@@ -39,7 +39,7 @@ public class MainCurrent {
 		//FsNode chapternode = timeline.getCurrentFsNode("chapter", curtime);
 		//app.log("els chapternode: " + chapternode.asXML());
 		
-		s
+		
 		//if (chapternode!=null) {
 //			Object oCurChap = s.getProperty("currentChapterNr");
 //			
