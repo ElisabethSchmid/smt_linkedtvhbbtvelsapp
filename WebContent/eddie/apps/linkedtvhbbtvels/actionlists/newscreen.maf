@@ -1,1 +1,2 @@
-setUrlTrigger(/lou/euscreen/linkedtvhbbtvels,/lou/domain/linkedtv/user/rbb/html5application/linkedtvhbbtvels?id=adb65e0a-642b-432f-aa86-c296dab0375a)
+setUrlTrigger(hbbtv.linkedtv.eu@/lou/linkedtv/,/lou/domain/linkedtv/user/rbb/html5application/linkedtvhbbtvels?id=adb65e0a-642b-432f-aa86-c296dab0375a)
+setUrlTrigger(hbbtv.linkedtv.eu@/lou/linkedtv/index.html,/lou/domain/linkedtv/user/rbb/html5application/linkedtvhbbtvels?id=adb65e0a-642b-432f-aa86-c296dab0375a)
