@@ -587,6 +587,8 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			entityList.add(entity);
 		}
 		
+		
+		log("epDuration: " + episode.getDuration() +" = milisec"+ ms);
 		if(episode.getDuration() == ms){
 			log("epDuration: " + episode.getDuration());
 			s.setProperty("selid", 1);

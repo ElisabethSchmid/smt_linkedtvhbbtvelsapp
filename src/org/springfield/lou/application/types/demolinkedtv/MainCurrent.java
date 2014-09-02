@@ -11,9 +11,11 @@ public class MainCurrent {
 		
 		//String annotationTitle = "TODO";
 		// what
+		
 		FsNode whatnode = timeline.getCurrentFsNode("object", curtime);
 		if (whatnode!=null) {
-			s.setContent("mainScreenInfoWhat",AppLanguage.getWhatSliderName() + ": "+whatnode.getProperty("title"));
+			s.setContent("mainScreenInfoWhat",whatnode.getProperty("title"));
+			//s.setContent("mainScreenInfoWhat",AppLanguage.getWhatSliderName() + ": "+whatnode.getProperty("title"));
 		} else {
 			s.setContent("mainScreenInfoWhat","");
 		}
@@ -22,7 +24,8 @@ public class MainCurrent {
 		// where
 		FsNode wherenode = timeline.getCurrentFsNode("location", curtime);
 		if (wherenode!=null) {
-			s.setContent("mainScreenInfoWhere",AppLanguage.getWhereSliderName() + ": "+wherenode.getProperty("title"));
+			s.setContent("mainScreenInfoWhere",wherenode.getProperty("title"));
+			//s.setContent("mainScreenInfoWhere",AppLanguage.getWhereSliderName() + ": "+wherenode.getProperty("title"));
 		} else {
 			s.setContent("mainScreenInfoWhere","");
 		}
@@ -30,7 +33,8 @@ public class MainCurrent {
 		// who
 		FsNode whonode = timeline.getCurrentFsNode("person", curtime);
 		if (whonode!=null) {
-			s.setContent("mainScreenInfoWho",AppLanguage.getWhoSliderName() + ": "+whonode.getProperty("title"));
+			s.setContent("mainScreenInfoWho",whonode.getProperty("title"));
+			//s.setContent("mainScreenInfoWho",AppLanguage.getWhoSliderName() + ": "+whonode.getProperty("title"));
 		} else {
 			s.setContent("mainScreenInfoWho","");
 		}
