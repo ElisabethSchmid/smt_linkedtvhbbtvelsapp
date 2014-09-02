@@ -108,13 +108,14 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		String fixedrole = s.getParameter("role");
 		
 		if (episode == null) {
+			System.out.println("EPISODE="+s.getParameter("id"));
 			episode = new Episode(s.getParameter("id"));
 		}
 		
 		// so we want to load based on device type
 		Capabilities caps = s.getCapabilities();
 		String dstyle = caps.getDeviceModeName();
-		
+
 		gain.screen_new(s.getId());
 		
 		// try to load special style first if not fallback.
@@ -172,7 +173,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			// reset for screens that might have run in the past?
 			currentTime = 0l;			
 			
-			System.out.println("Main screen presentation uri = "+episode.getPresentationId());
+			//System.out.println("Main screen presentation uri = "+episode.getPresentationId());
 			s.setRole("mainscreen");
 			loadMainScreen(s);			
 		}
@@ -186,9 +187,14 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	 * @param s - the main screen
 	 */
 	private void loadMainScreen(Screen s) {
+		System.out.println("EPISODE="+episode);
+		Boolean hbbtvMode = false;
 		// switch between HTML5 version and HbbTV version
-		
-
+		Capabilities caps = s.getCapabilities();
+		if (caps.getDeviceMode() == caps.MODE_HBBTV) {
+			hbbtvMode = true;
+		}
+		System.out.println("HBBTVMODE="+hbbtvMode);
 		if (hbbtvMode == false) {
 			loadContent(s, "video");
 			loadContent(s, "desktopmanager");
@@ -196,11 +202,18 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			loadContent(s, "mainscreencard");
 			loadContent(s, "mainscreenslider");
     		//TODO els  s.setContent("video","setVideo("+ episode.getStreamUri() +")");??
+			System.out.println("STREAM="+episode.getStreamuri(3));
 			this.componentmanager.getComponent("video").put("app", "setVideo("+ episode.getStreamUri() +")");
+			//String vurl = "http://stream18.noterik.com/progressive/stream18/domain/linkedtv/user/rbb/video/1633/rawvideo/2/raw.mp4";
+			//this.componentmanager.getComponent("video").put("app", "setVideo("+ vurl +")");
+			
 			this.componentmanager.getComponent("video").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 		} else {
 			
 			loadContent(s, "hbbtvvideo");
+			//String vurl = "http://stream18.noterik.com/progressive/stream18/domain/linkedtv/user/rbb/video/1633/rawvideo/2/raw.mp4";
+			//this.componentmanager.getComponent("video").put("app", "setVideo("+ vurl +")");
+
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ episode.getStreamuri(3) +")");
 			//this.componentmanager.getComponent("hbbtvvideo").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "play()");
@@ -589,11 +602,13 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		
 		
 		//log("epDuration: " + episode.getDuration() +" = milisec"+ ms);
+		/*
 		if(episode.getDuration() >= ms){
 			log("epDuration: " + episode.getDuration() +" = milisec"+ ms);
 			s.putMsg("hbbtvvideo","app","seek("+ 0 +")");
 			s.setProperty("selid", 1);
 		}
+		*/
 		
 		gain.updateEntities(entityList);
 		gain.sendKeepAliveRequest();
