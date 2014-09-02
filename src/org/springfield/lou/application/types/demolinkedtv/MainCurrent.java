@@ -14,30 +14,32 @@ public class MainCurrent {
 		
 		FsNode whatnode = timeline.getCurrentFsNode("object", curtime);
 		if (whatnode!=null) {
-			s.setContent("mainScreenInfoWhat",whatnode.getProperty("title"));
+			s.setContent("mainscreeninfo",whatnode.getProperty("title"));
 			//s.setContent("mainScreenInfoWhat",AppLanguage.getWhatSliderName() + ": "+whatnode.getProperty("title"));
-		} else {
-			s.setContent("mainScreenInfoWhat","");
 		}
+		//else {
+		//	s.setContent("mainScreenInfoWhat","");
+		//}
 		
 		
 		// where
 		FsNode wherenode = timeline.getCurrentFsNode("location", curtime);
 		if (wherenode!=null) {
-			s.setContent("mainScreenInfoWhere",wherenode.getProperty("title"));
+			s.setContent("mainscreeninfo",wherenode.getProperty("title"));
 			//s.setContent("mainScreenInfoWhere",AppLanguage.getWhereSliderName() + ": "+wherenode.getProperty("title"));
-		} else {
-			s.setContent("mainScreenInfoWhere","");
-		}
+		} //else {
+			//s.setContent("mainScreenInfoWhere","");
+		//}
 		
 		// who
 		FsNode whonode = timeline.getCurrentFsNode("person", curtime);
 		if (whonode!=null) {
-			s.setContent("mainScreenInfoWho",whonode.getProperty("title"));
+			s.setContent("mainscreeninfo",whonode.getProperty("title"));
 			//s.setContent("mainScreenInfoWho",AppLanguage.getWhoSliderName() + ": "+whonode.getProperty("title"));
-		} else {
-			s.setContent("mainScreenInfoWho","");
-		}
+		} 
+		//else {
+			//s.setContent("mainScreenInfoWho","");
+		//}
 		
 		// chapter
 		//FsNode chapternode = timeline.getCurrentFsNode("chapter", curtime);

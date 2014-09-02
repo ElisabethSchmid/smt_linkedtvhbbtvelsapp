@@ -145,11 +145,7 @@
 			 <exclude name="WEB-INF/lib/l*" />
 			 <exclude name="WEB-INF/web.xml" />
 			</fileset>
-		</war>
-        <exec executable="/bin/bash">
-        <arg value="/springfield/tomcat/bin/noterikcopy_els.sh"/>
-        </exec>
-			
+		</war>			
 	</target>
 	
 	<target name="deploy-server" depends="deploy-war">

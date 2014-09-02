@@ -51,12 +51,15 @@ public class MainSlider {
 		
 			body+="<img class=\"mainsliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
 			body+="<div class=\"timecode\">"+app.getTimeCodeString(node.getStarttime()/1000)+"</div>";
-			if (title == null) {
-			} else if (title.length()>40) {
-				body+="<div class=\"overlay\"><p>"+title.substring(37)+"...</p></div>";
-			} else {
-				body+="<div class=\"overlay\"><p>"+title+"</p></div>";
-			}
+			if (curid!=null && curid.equals(thisid)){//TODO els
+			body+="<div class=\"currentChaptitle\">"+title+"</div>";//TODO els
+			}//TODO els
+//			if (title == null) {
+//			} else if (title.length()>40) {
+//				body+="<div class=\"overlay\"><p>"+title.substring(37)+"...</p></div>";
+//			} else {
+//				body+="<div class=\"overlay\"><p>"+title+"</p></div>";
+//			}//TODO els
 			body+="</div>";	
 			i++;
 		}
