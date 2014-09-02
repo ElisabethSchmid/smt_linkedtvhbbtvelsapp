@@ -33,6 +33,7 @@ public class MainSlider {
 		} catch(Exception e) {
 			
 		}
+		String titleToDisplay = ""; 
 		
 		for(Iterator<FsNode> iter = timeline.getFsNodesByType("chapter"); iter.hasNext(); ) {
 			FsNode node = (FsNode)iter.next();
@@ -50,9 +51,10 @@ public class MainSlider {
 			}
 		
 			body+="<img class=\"mainsliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
-			body+="<div class=\"timecode\">"+app.getTimeCodeString(node.getStarttime()/1000)+"</div>";
+			//body+="<div class=\"timecode\">"+app.getTimeCodeString(node.getStarttime()/1000)+"</div>"; //TODO proof if to keep
 			if (curid!=null && curid.equals(thisid)){//TODO els
-			body+="<div class=\"currentChaptitle\">"+title+"</div>";//TODO els
+				titleToDisplay = title; //TODO els
+			//body+="<div class=\"currentChaptitle\">"+title+"</div>";//TODO els
 			}//TODO els
 //			if (title == null) {
 //			} else if (title.length()>40) {
@@ -63,6 +65,7 @@ public class MainSlider {
 			body+="</div>";	
 			i++;
 		}
+		body+="<div id=\"currentChapTitle\">"+titleToDisplay+"</div>";//TODO els
 		s.setContent("mainscreenslider",body);
 	}
 

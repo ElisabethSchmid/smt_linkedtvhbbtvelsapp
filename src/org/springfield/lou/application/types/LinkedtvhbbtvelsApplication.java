@@ -588,11 +588,11 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		}
 		
 		
-		log("epDuration: " + episode.getDuration() +" = milisec"+ ms);
-		if(episode.getDuration() == ms){
-			log("epDuration: " + episode.getDuration());
+		//log("epDuration: " + episode.getDuration() +" = milisec"+ ms);
+		if(episode.getDuration() >= ms){
+			log("epDuration: " + episode.getDuration() +" = milisec"+ ms);
+			s.putMsg("hbbtvvideo","app","seek("+ 0 +")");
 			s.setProperty("selid", 1);
-			gotoChapter(s);
 		}
 		
 		gain.updateEntities(entityList);

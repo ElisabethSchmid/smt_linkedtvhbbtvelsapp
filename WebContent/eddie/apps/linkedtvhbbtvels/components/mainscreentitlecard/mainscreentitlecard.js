@@ -17,7 +17,7 @@ function Mainscreentitlecard(options) {
 					$('#mainscreenslider').animate({bottom:'0px'},250,function() { self.animDone('in'); });
 					break;
 				case 'hide':
-					$('#mainscreenslider').animate({bottom:'-120px'},250,function() { self.animDone('out'); });
+					$('#mainscreenslider').animate({bottom:'-140px'},250,function() { self.animDone('out'); });
 					break;
 				default:
 					alert('unhandled msg in mainscreenslider.html : '+msg+' ('+command+','+content+')'); 

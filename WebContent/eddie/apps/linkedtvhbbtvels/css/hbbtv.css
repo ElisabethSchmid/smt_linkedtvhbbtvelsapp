@@ -35,12 +35,14 @@ body {
 	color: #ffffff;
 	border: 2px solid #5555CC;
 	border-radius: 10px;
-	padding: 4px 10px 1px 10px;
+	padding: 4px 20px 1px 20px;
 	font-size : 18px;
 	font-style : bold;
 	position:absolute;
 	top: 10px;
 	right: 20px;
+	height: 50px;
+	width: 300px;
 	opacity: 0.7;
 }
 
@@ -56,8 +58,8 @@ body {
 	font-style : bold;
 	left : 0px;
 	width: 5000px;
-	height: 100px;
-	bottom: -120px;
+	height: 130px;
+	bottom: -130px;
 	opacity: 0.8;
 }
 
@@ -92,6 +94,15 @@ body {
 	height: 70px;
 }
 
+#currentChapTitle {
+	position:absolute;
+	font-size : 28px;/*TODO*/
+	font-style : bold;
+	left : 10px;
+	width: 5000px;
+	bottom: 5px;
+}
+
 #mainscreencard {
 	background-color:#000000;
 	color: #ffffff;
@@ -101,8 +112,8 @@ body {
 	font-size : 18px;
 	font-style : bold;
 	position:absolute;
-	top: 180px;
-	bottom: 110px;
+	top: 150px;
+	bottom: 140px;
 	left: 15%;
 	right: 15%;
 	opacity: 0.7;
@@ -120,7 +131,7 @@ body {
 	font-style : bold;
 	position:absolute;
 	top: 280px;
-	bottom: 110px;
+	bottom: 130px;
 	left: 15%;
 	right: 15%;
 	opacity: 0.7;
