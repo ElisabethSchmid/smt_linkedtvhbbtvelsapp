@@ -2,7 +2,7 @@ body {
 	background-color:#000000;
 	color: #bbbbbb;
 	font-size : 18px;
-	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-family: "Trebuchet MS", Helvetica, Verdana, Arial;
 }
 
 #droparea {
@@ -554,7 +554,7 @@ body {
 	left: 26px;
 	font-size : 22px;
 	padding: 0px 0px 0px 0px;
-	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-family: "Trebuchet MS", Helvetica, Verdana, Arial;
 }
 
 
