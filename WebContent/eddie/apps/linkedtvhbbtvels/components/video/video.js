@@ -41,9 +41,9 @@ function Video(options) {
 				case 'play':
 					self.handlePlay();
 					break;
-				case 'started':
-					self.handlePlay(content);//TODO
-					break;
+//				case 'started':
+//					self.handlePlay(content);//TODO
+//					break;
 				case 'pause':
 		            self.handlePause();
 					break;
