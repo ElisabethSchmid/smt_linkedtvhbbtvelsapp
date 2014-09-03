@@ -602,13 +602,21 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		
 		
 		//log("epDuration: " + episode.getDuration() +" = milisec"+ ms);
-		/*
-		if(episode.getDuration() >= ms){
-			log("epDuration: " + episode.getDuration() +" = milisec"+ ms);
-			s.putMsg("hbbtvvideo","app","seek("+ 0 +")");
-			s.setProperty("selid", 1);
-		}
-		*/
+		
+//		if(episode.getDuration() <= ms){
+//			log("epDuration: " + episode.getDuration() +" = milisec"+ ms);
+//			if (hbbtvMode == false) {
+//				//s.putMsg("hbbtvvideo","app","seek("+ 0 +")");
+//				this.componentmanager.getComponent("hbbtvvideo").put("app", "play()");
+//				//s.setProperty("selid", 1);
+//			} 
+//			//else {
+//			//	s.putMsg("video","app","seek("+ 0 +")");
+//			//}
+//			
+//			
+//		}
+		
 		
 		gain.updateEntities(entityList);
 		gain.sendKeepAliveRequest();
@@ -1151,7 +1159,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			//body += "<p id=\"infoscreen_title\" class=\"info_text_1\">"+entity+"</p>";
 			String body = "";
 		
-			body += "<div class=\"infoscreen_div_centered\">";
+			body += "<div class=\"infoscreencard_div_centered\">";
 			body += "<p id=\"maincard_title\" class=\"maincard_text_1\">";
 			body += AppLanguage.getChapterSliderName();
 	    	body += " ";

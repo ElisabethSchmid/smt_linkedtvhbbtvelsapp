@@ -295,6 +295,9 @@ function Hbbtvvideo(options) {
 				case 'seek':
 					self.handleSeek(content);
 					break;
+				case 'started':
+					self.handlePlay(content);//TODO
+					break;
 				case 'qrcode':
 					 video_toggleQRCode();
 					break;
