@@ -68,6 +68,7 @@ import org.springfield.mojo.linkedtv.GAINObjectEntity;
 public class LinkedtvhbbtvelsApplication extends Html5Application {
 	private static String GAIN_ACCOUNT = "LINKEDTV-TEST";
 	
+	
 	private Episode episode;
 	private GAIN gain;
 	
@@ -84,8 +85,8 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	
 	public LinkedtvhbbtvelsApplication(String id) {
 		super(id); 
-		gain = new GAIN(GAIN_ACCOUNT, id);
-		gain.application_new();
+		//gain = new GAIN(GAIN_ACCOUNT, id);
+		if (gain!=null) gain.application_new();
 		
 		System.out.println("LINKEDTVHBBTV APPLICATION STARTED");
 	}
@@ -93,8 +94,8 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	public LinkedtvhbbtvelsApplication(String id, String remoteReceiver) {
 		super(id, remoteReceiver); 
 		
-		gain = new GAIN(GAIN_ACCOUNT, id);
-		gain.application_new();
+		// gain = new GAIN(GAIN_ACCOUNT, id);
+		if (gain!=null) gain.application_new();
 		System.out.println("LINKEDTVHBBTV APPLICATION STARTED 2");
 	}
 	
@@ -116,7 +117,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		Capabilities caps = s.getCapabilities();
 		String dstyle = caps.getDeviceModeName();
 
-		gain.screen_new(s.getId());
+		if (gain!=null) gain.screen_new(s.getId());
 		
 		// try to load special style first if not fallback.
 		loadStyleSheet(s,"animate");
@@ -249,7 +250,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	public void onNewUser(Screen s,String name) {
 		super.onNewUser(s, name);
 		
-		gain.user_login(name, s.getId());
+		if (gain!=null) gain.user_login(name, s.getId());
 		
 		String body = Slider.loadDataJoined(this,timeline);
 		ComponentInterface comp = getComponentManager().getComponent("joinedslider");
@@ -270,7 +271,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	public void onLogoutUser(Screen s,String name) {
 		super.onLogoutUser(s, name);
 		
-		gain.user_logout(name, s.getId());
+		if (gain!=null) gain.user_logout(name, s.getId());
 		
 		String body = Slider.loadDataJoined(this,timeline);
 		ComponentInterface comp = getComponentManager().getComponent("joinedslider");
@@ -414,7 +415,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 	private void handleLoadBlockData(Screen s,String content) {
 		String params[] = content.split(",");		
 		
-		gain.user_select(s.getUserName(), params[1], s.getId());
+		if (gain!=null) gain.user_select(s.getUserName(), params[1], s.getId());
 		
 		String type = params[0].substring(0,params[0].indexOf("_"));
 		String id = params[0].substring(params[0].indexOf("_")+6); //compensate for '_block'
@@ -618,8 +619,10 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 //		}
 		
 		
-		gain.updateEntities(entityList);
-		gain.sendKeepAliveRequest();
+		if (gain!=null) {
+			gain.updateEntities(entityList);
+			gain.sendKeepAliveRequest();
+		}
 	}
 	
 	/**
@@ -735,7 +738,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 		// set the changed capabilities
 		Capabilities caps = s.getCapabilities();
 		caps.addCapability("orientation", o); // set the new orientation
-		gain.screen_orientation(s.getId(), o);
+		if (gain!=null) gain.screen_orientation(s.getId(), o);
 		
 		// reload the style sheet (should we not remove the old?)
 		String dstyle = caps.getDeviceModeName();
@@ -757,7 +760,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 		}
 		User u = getUserManager().getUser(username);
 		if (u!=null) {
-			gain.user_bookmark(username, content, s.getId());
+			if (gain!=null) gain.user_bookmark(username, content, s.getId());
 			u.addBookmark(content);
 			s.putMsg("notification","app","show(bookmarked "+u.getBookmarks().size()+")");
 		}		
@@ -849,7 +852,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			loadContent(s, "mainscreenslider");
 			//this.componentmanager.getComponent("mainscreeninfo").put("app", "showMainScreenInfo()");
 		}
-		gain.player_play(s.getId(), episode.getMediaResourceId(), videoTime);
+		if (gain!=null) gain.player_play(s.getId(), episode.getMediaResourceId(), videoTime);
 	}
 	
 	/**
@@ -861,7 +864,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 		} else {
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "started()");
 		}
-		gain.player_pause(s.getId(), episode.getMediaResourceId(), videoTime);
+		if (gain!=null) gain.player_pause(s.getId(), episode.getMediaResourceId(), videoTime);
 	}
 	
 	/**
@@ -873,7 +876,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 		} else {
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "stopped()");
 		}
-		gain.player_stop(s.getId(), episode.getMediaResourceId(), videoTime);
+		if (gain!=null) gain.player_stop(s.getId(), episode.getMediaResourceId(), videoTime);
 	}
 	
 	
@@ -923,7 +926,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 		System.out.println("Received info block finished with following params "+params);
 		String[] parameters = params.split(",");
 		if (parameters != null && parameters.length == 2) {
-			gain.user_viewtime(s.getUserName(), parameters[1], s.getId(), parameters[0]);
+			if (gain!=null) gain.user_viewtime(s.getUserName(), parameters[1], s.getId(), parameters[0]);
 		}
 	}
 	
