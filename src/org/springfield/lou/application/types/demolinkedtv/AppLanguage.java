@@ -63,7 +63,7 @@ public class AppLanguage {
 	}
 
 	public static String getRotateScreen() {
-		return time;
+		return rotateScreen;
 	}
 
 	

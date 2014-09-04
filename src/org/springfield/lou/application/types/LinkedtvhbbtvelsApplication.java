@@ -204,18 +204,18 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			loadContent(s, "mainscreenslider");
     		//TODO els  s.setContent("video","setVideo("+ episode.getStreamUri() +")");??
 			System.out.println("STREAM="+episode.getStreamuri(3));
-			this.componentmanager.getComponent("video").put("app", "setVideo("+ episode.getStreamUri() +")");
-			//String vurl = "http://stream18.noterik.com/progressive/stream18/domain/linkedtv/user/rbb/video/1633/rawvideo/2/raw.mp4";
-			//this.componentmanager.getComponent("video").put("app", "setVideo("+ vurl +")");
+			//this.componentmanager.getComponent("video").put("app", "setVideo("+ episode.getStreamUri() +")");
+			String vurl = "http://images3.noterik.com/linkedtv/raw2.mp4";
+			this.componentmanager.getComponent("video").put("app", "setVideo("+ vurl +")");
 			
-			this.componentmanager.getComponent("video").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
+			//this.componentmanager.getComponent("video").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 		} else {
 			
 			loadContent(s, "hbbtvvideo");
-			//String vurl = "http://stream18.noterik.com/progressive/stream18/domain/linkedtv/user/rbb/video/1633/rawvideo/2/raw.mp4";
-			//this.componentmanager.getComponent("video").put("app", "setVideo("+ vurl +")");
+			String vurl = "http://images3.noterik.com/linkedtv/raw3.mp4";
+			this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ vurl +")");
 
-			this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ episode.getStreamuri(3) +")");
+			//this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ episode.getStreamuri(3) +")");
 			//this.componentmanager.getComponent("hbbtvvideo").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 			this.componentmanager.getComponent("hbbtvvideo").put("app", "play()");
 		}
@@ -423,11 +423,13 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		String orientation = params[2];
 		String entity = params[3];
 		String image = params[4];
-		String description = content.substring(content.indexOf(",", content.indexOf(image+",")+image.length())+1);
+		//String description = content.substring(content.indexOf(",", content.indexOf(image+",")+image.length())+1);
+		String description = null;
 		System.out.println("LOAD BLOCKDATA="+content+" TYPE="+type);
 		String body = "";
 		String color = "";
-		System.out.println("ENTITY = "+entity+" DESCRIPTION = "+description);
+		//System.out.println("ENTITY = "+entity+" DESCRIPTION = "+description);
+
 		
 		String fsType = type;
 		if (type.equals("what")) {
@@ -439,6 +441,12 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		}
 		
 		FsNode annotation = timeline.getFsNodeById(fsType, Integer.parseInt(id));
+		FsNode proxynode  = episode.getEntityFromProxy(annotation.getProperty("locator"));
+		if (proxynode!=null) {
+			System.out.println("PROXY VALUE DESCRIPTION = "+proxynode.getProperty("description"));
+			description = proxynode.getProperty("description");
+		}
+		
 		FSList enrichmentsList = episode.getEnrichmentsFromAnnotation(annotation);
 		List<FsNode> enrichments = enrichmentsList.getNodes();
 		
@@ -467,7 +475,11 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			body += "<p id=\"infoscreen_title\" class=\"info_text_1\">"+entity+"</p>";
 			body += "<div>";
 			body += "<center>";
-			body += "<p id=\"info_description\">"+description+"</p>";
+			if (description!=null) {
+				body += "<p id=\"info_description\">"+description+"</p>";
+			} else {
+				body += "<p id=\"info_description\"></p>";
+			}
 			body += "<p class=\"info_text_1\">"+ AppLanguage.getFindOutMore() +"</p>";
 			body += "<div>";
 			for (FsNode enrichment : enrichments) {
@@ -478,7 +490,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 				}
 				body += "</a><br/>";
 			}
-			body += "<p class=\"info_text_2\">"+ AppLanguage.getRotateScreen()+"/p>";
+			body += "<p class=\"info_text_2\">"+ AppLanguage.getRotateScreen()+"</p>";
 			body += "</div>";
 			body += "</center>";
 			body += "</div>";
@@ -553,7 +565,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		if (comp!=null) {
 			if (currentChapter != newChapter) {
 				String body = Slider.loadDataWho(this,timeline, chapterStart, chapterDuration);
-				System.out.println("Sending new layer data: "+body);
+				//System.out.println("Sending new layer data: "+body);
 				comp.put("app", "html("+body+")");
 			}
 			
@@ -567,7 +579,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		if (comp!=null) {
 			if (currentChapter != newChapter) {
 				String body = Slider.loadDataWhat(this,timeline, chapterStart, chapterDuration);
-				System.out.println("Sending new layer data: "+body);
+				//System.out.println("Sending new layer data: "+body);
 				comp.put("app", "html("+body+")");
 			}
 			
@@ -581,7 +593,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		if (comp!=null) {
 			if (currentChapter != newChapter) {
 				String body = Slider.loadDataWhere(this,timeline, chapterStart, chapterDuration);
-				System.out.println("Sending new layer data: "+body);
+				//System.out.println("Sending new layer data: "+body);
 				comp.put("app", "html("+body+")");
 			}
 			
@@ -621,7 +633,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		
 		if (gain!=null) {
 			gain.updateEntities(entityList);
-			gain.sendKeepAliveRequest();
+		//	gain.sendKeepAliveRequest();
 		}
 	}
 	
@@ -958,7 +970,9 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 				    	if (onscreen==null) {
 				    		selectNextChapter(s);
 				    	} else {
-				    		hideMainCard(s);
+							int pos = getScreenPropertyInt(s, "cardonscreenpos");
+				    		s.setProperty("cardonscreenpos",""+(pos+1));
+				    		fillMainCard(s);
 				    	}
 						break;
 					case RemoteControl.REMOTEKEY_LEFT :
@@ -966,16 +980,21 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 				    	if (onscreen==null) {
 				    		selectPrevChapter(s);
 				    	} else {
-				    		hideMainCard(s);
+							int pos = getScreenPropertyInt(s, "cardonscreenpos");
+							if (pos>0) { 
+								s.setProperty("cardonscreenpos",""+(pos-1));
+								fillMainCard(s);
+							}
 				    	}
 						break;
 					case RemoteControl.REMOTEKEY_UP :
 				    	onscreen = s.getProperty("slideronscreen");
 				    	if (onscreen==null) {
 				    		showMainSlider(s);
-				    	} else {
-				    		showMainCard(s);
+				    	} else {	    	
+				    		s.setProperty("cardonscreenpos","0");
 				    		fillMainCard(s);
+				    		showMainCard(s);
 				    	}
 						break;
 					case RemoteControl.REMOTEKEY_DOWN :
@@ -1143,6 +1162,36 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 	    }
 	    
 	    private void fillMainCard(Screen s) {
+	    	
+			FsNode node = null;
+			Object o = s.getProperty("selid");
+			if(o == null){
+				s.setProperty("selid", "1");
+			}
+			int nodeId = getScreenPropertyInt(s, "selid");
+			node = timeline.getFsNodeById("chapter", nodeId);
+			
+			String body = "TEST:\n";
+			FSList annotationsList = episode.getAnnotationsFromChapter(node);
+			List<FsNode> annotations = annotationsList.getNodes();
+			/*
+			for (FsNode annotation : annotations) {
+				body+=annotation.getProperty("locator")+"\n";
+			}
+			*/
+			int pos = getScreenPropertyInt(s, "cardonscreenpos");
+			FsNode annotation = annotations.get(pos);
+			String eurl = annotation.getProperty("locator"); // we want stuff from the proxy
+			
+			FsNode proxynode = episode.getEntityFromProxy(eurl);
+			if (proxynode!=null) {
+				body += proxynode.getProperty("description");
+			}
+			
+	    	s.setContent("mainscreencard",body);
+	    }
+	    
+	    private void fillMainCard_old(Screen s) {
 	    	
 			FsNode node = null;
 			Object o = s.getProperty("selid");
