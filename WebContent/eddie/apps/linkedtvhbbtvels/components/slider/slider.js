@@ -31,16 +31,6 @@ function /Slider(options){
 	var language;
 	$.extend(settings, options);
 
-	var insertListener = function(event) {
-        if (event.animationName == "nodeInserted") {
-                queue.push($(event.target).find('div[id^="locator"]').text());
-                startQueueHandling();
-        }
-	}
-	
-	document.addEventListener("animationstart", insertListener, false); // standard + firefox
-	document.addEventListener("MSAnimationStart", insertListener, false); // IE
-	document.addEventListener("webkitAnimationStart", insertListener, false); // Chrome + Safari
 
 	
 	self.putMsg = function(msg){
@@ -107,46 +97,6 @@ function /Slider(options){
 		language = line;
 	}
 	
-	function startQueueHandling() {
-		if (queue.length>8) {
-			queueHandler();
-		}
-	}
-	
-	function queueHandler() {
-		var uri = "http://linkedtv.project.cwi.nl/explore/entity_proxy?";
-		while(queue.length > 0) {
-			var entity = queue.shift();
-			uri += "url="+entity+"&";
-		}
-		uri += "lang="+language;
-		$.ajax({
-			dataType: "json",
-			url: uri
-		}).done(function (data) {
-			updateImages(data);
-		});
-	}
-
-	function updateImages(data) {
-		$.each(data, function(i, object) {
-			//var entity = i.substring(i.lastIndexOf("/")+1);
-			if (Object.keys(object).length > 0) {
-				//console.log("entity = "+entity);
-				console.log("object = "+object);
-				$("[data-locator='"+i+"']").each(function(){
-				//$("[data-entity='"+entity+"']").each(function(){
-					if (object.thumb !== undefined) {
-						console.log("item thumb= "+object.thumb);
-						$(this).find('img').attr('src', object.thumb[0]);
-					}
-					if (object.comment !== undefined) {
-						$(this).find('div[id^="description_"]').text(object.comment[0].value);
-					}					
-				});
-			}
-		});
-	}
 	
 	eddie.putLou("","loaddata(/slider)");
 	return self;

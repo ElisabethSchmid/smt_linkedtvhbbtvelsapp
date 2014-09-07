@@ -292,6 +292,9 @@ function Hbbtvvideo(options) {
 				case 'pause':
 		            self.handlePause();
 					break;
+				case 'continue':
+		            self.handleContinue();
+					break;
 				case 'seek':
 					self.handleSeek(content);
 					break;
@@ -324,14 +327,19 @@ function Hbbtvvideo(options) {
 		document.getElementById("video_1").play(1);
 		var position = isNaN(document.getElementById("video_1").playPosition) ? 0 : document.getElementById("video_1").playPosition;
 		eddie.putLou('', 'started('+position+')');
-		eddie.putLou('notification','show(play)');
+	//	eddie.putLou('notification','show(play)');
 	}
 
 	self.handlePause = function() {
 		document.getElementById("video_1").play(0);
 		var position = isNaN(document.getElementById("video_1").playPosition) ? 0 : document.getElementById("video_1").playPosition;
 		eddie.putLou('', 'paused('+position+')');
-		eddie.putLou('notification','show(pause)');
+	//	eddie.putLou('notification','show(pause)');
+	}
+	
+	self.handleContinue = function() {
+		document.getElementById("video_1").play(1);
+		var position = isNaN(document.getElementById("video_1").playPosition) ? 0 : document.getElementById("video_1").playPosition;
 	}
 
 	self.handleSeek = function(content) {
@@ -339,7 +347,7 @@ function Hbbtvvideo(options) {
 		var time = parseInt(ms);
 		if (time>1) time = time - 1 ;
 		document.getElementById("video_1").seek(time);
-		eddie.putLou('notification','show(seek '+Math.floor(time)+')');
+		//eddie.putLou('notification','show(seek '+Math.floor(time)+')');
 	}
 	
 	self.setVideo = function(video) {

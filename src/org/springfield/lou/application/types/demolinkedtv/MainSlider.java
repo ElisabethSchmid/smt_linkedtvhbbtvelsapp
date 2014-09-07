@@ -50,7 +50,7 @@ public class MainSlider {
 				body += "data-uid=\""+node.getProperty("uid")+"\" data-entity=\""+title+"\" id=\"chapter_block"+(i)+"\">";				
 			}
 		
-			body+="<img class=\"mainsliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+			body+="<img class=\"mainsliderimg\" src=\""+getScreenShotUrl(node,app)+"\" />";
 			//body+="<div class=\"timecode\">"+app.getTimeCodeString(node.getStarttime()/1000)+"</div>"; //TODO proof if to keep
 			if (curid!=null && curid.equals(thisid)){//TODO els
 				titleToDisplay = title; //TODO els
@@ -67,6 +67,16 @@ public class MainSlider {
 		}
 		body+="<div id=\"currentChapTitle\">"+titleToDisplay+"</div>";//TODO els
 		s.setContent("mainscreenslider",body);
+	}
+	
+	private static String getScreenShotUrl(FsNode node,LinkedtvhbbtvelsApplication parent) {
+		String result = node.getScreenShotUrl();
+		String localurl = parent.getLocalScreenshotUrl();
+		if (localurl!=null) {
+			result = localurl+result.substring(26);
+		}
+		//System.out.println("SCREENSHOT2="+result);
+		return result;
 	}
 
 }

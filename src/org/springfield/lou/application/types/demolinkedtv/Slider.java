@@ -126,7 +126,7 @@ public class Slider {
 				body += "<div class=\"sliderblock who\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 				body += "data-uid=\""+node.getId()+"\" data-entity=\""+title+"\" data-locator=\""+node.getProperty("locator")+"\" id=\"who_block"+(i)+"\">";
 			
-				body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+				body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 				body+="<div class=\"timecode bluet\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 				
 				if (title == null) {
@@ -176,7 +176,7 @@ public class Slider {
 				body += "<div class=\"sliderblock what\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 				body += "data-uid=\""+node.getId()+"\" data-entity=\""+title+"\" data-locator=\""+node.getProperty("locator")+"\" id=\"what_block"+(i)+"\">";
 						
-				body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+				body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 				body+="<div class=\"timecode greent\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 				
 				if (title == null) {
@@ -226,7 +226,7 @@ public class Slider {
 				body += "<div class=\"sliderblock where\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 				body += "data-uid=\""+node.getId()+"\" data-entity=\""+title+"\" data-locator=\""+node.getProperty("locator")+"\" id=\"where_block"+(i)+"\">";
 				
-				body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+				body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 				body+="<div class=\"timecode pinkt\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 				
 				if (title == null) {
@@ -272,7 +272,7 @@ public class Slider {
 			body += "<div class=\"sliderblock chapter\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 			body += "data-uid=\""+node.getProperty("uid")+"\" data-entity=\""+title+"\" id=\"chapter_block"+(i)+"\">";
 		
-			body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+			body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 			body+="<div class=\"timecode brownt\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 			
 			if (title == null) {
@@ -341,7 +341,7 @@ public class Slider {
 								body += "<div class=\"sliderblock who\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 								body += "data-uid=\""+node.getId()+"\" data-entity=\""+title+"\" data-locator=\""+node.getProperty("locator")+"\" id=\"who_block"+(i)+"\">";
 							
-								body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+								body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 								body+="<div class=\"timecode bluet\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 								
 								if (title == null) {
@@ -359,7 +359,7 @@ public class Slider {
 								body += "<div class=\"sliderblock what\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 								body += "data-uid=\""+node.getId()+"\" data-entity=\""+title+"\" data-locator=\""+node.getProperty("locator")+"\" id=\"what_block"+(i)+"\">";
 										
-								body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+								body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 								body+="<div class=\"timecode greent\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 								
 								if (title == null) {
@@ -377,7 +377,7 @@ public class Slider {
 								body += "<div class=\"sliderblock where\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 								body += "data-uid=\""+node.getId()+"\" data-entity=\""+title+"\" data-locator=\""+node.getProperty("locator")+"\" id=\"where_block"+(i)+"\">";
 								
-								body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+								body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 								body+="<div class=\"timecode pinkt\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 								
 								if (title == null) {
@@ -395,7 +395,7 @@ public class Slider {
 								body += "<div class=\"sliderblock chapter\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 								body += "data-uid=\""+node.getProperty("uid")+"\" data-entity=\""+title+"\" id=\"chapter_block"+(i)+"\">";
 							
-								body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+								body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 								body+="<div class=\"timecode brownt\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 								
 								if (title == null) {
@@ -469,7 +469,7 @@ public class Slider {
 								body += "<div class=\"sliderblock who\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 								body += "data-uid=\""+node.getId()+"\" data-entity=\""+title+"\" data-locator=\""+node.getProperty("locator")+"\" id=\"who_block"+(i)+"\">";
 							
-								body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+								body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 								body+="<div class=\"timecode bluet\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 								
 								if (title == null) {
@@ -487,7 +487,7 @@ public class Slider {
 								body += "<div class=\"sliderblock what\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 								body += "data-uid=\""+node.getId()+"\" data-entity=\""+title+"\" data-locator=\""+node.getProperty("locator")+"\" id=\"what_block"+(i)+"\">";
 										
-								body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+								body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 								body+="<div class=\"timecode greent\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 								
 								if (title == null) {
@@ -505,7 +505,7 @@ public class Slider {
 								body += "<div class=\"sliderblock where\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 								body += "data-uid=\""+node.getId()+"\" data-entity=\""+title+"\" data-locator=\""+node.getProperty("locator")+"\" id=\"where_block"+(i)+"\">";
 								
-								body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+								body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 								body+="<div class=\"timecode pinkt\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 								
 								if (title == null) {
@@ -523,7 +523,7 @@ public class Slider {
 								body += "<div class=\"sliderblock chapter\" data-referid=\""+node.getPath()+"\" data-time=\""+node.getStarttime()/1000+"\"";
 								body += "data-uid=\""+node.getProperty("uid")+"\" data-entity=\""+title+"\" id=\"chapter_block"+(i)+"\">";
 							
-								body+="<img class=\"sliderimg\" src=\""+node.getScreenShotUrl()+"\" />";
+								body+="<img class=\"sliderimg\" src=\""+getScreenShotUrl(node,parent)+"\" />";
 								body+="<div class=\"timecode brownt\">"+parent.getTimeCodeString(node.getStarttime()/1000)+"</div>";
 								
 								if (title == null) {
@@ -617,5 +617,15 @@ public class Slider {
 		body+="<div class=\"timecode redt\">20</div>";
 		body+="<div class=\"overlay\"><p>Kati: Are there more episodes ?</p></div></div>";
 		return body;
+	}
+	
+	private static String getScreenShotUrl(FsNode node,LinkedtvhbbtvelsApplication parent) {
+		String result = node.getScreenShotUrl();
+		String localurl = parent.getLocalScreenshotUrl();
+		if (localurl!=null) {
+			result = localurl+result.substring(26);
+		}
+		//System.out.println("SCREENSHOT2="+result);
+		return result;
 	}
 }

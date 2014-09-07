@@ -47,6 +47,9 @@ function Video(options) {
 				case 'pause':
 		            self.handlePause();
 					break;
+				case 'continue':
+		            self.handleContinue();
+					break;
 				case 'seek':
 					self.handleSeek(content);
 					break;
@@ -103,22 +106,26 @@ function Video(options) {
         myPlayer.play();
         var position = isNaN(myPlayer.currentTime) ? 0 : myPlayer.currentTime;
 		eddie.putLou('', 'started('+position+')');
-		eddie.putLou('notification','show(play)');
+		//eddie.putLou('notification','show(play)');
 	}
 
 	self.handlePause = function() {
 		myPlayer.pause();
 		var position = isNaN(myPlayer.currentTime) ? 0 : myPlayer.currentTime;
 		eddie.putLou('', 'paused('+position+')');
-		eddie.putLou('notification','show(pause)');
+		//eddie.putLou('notification','show(pause)');
 	}
 
+	self.handleContinue = function() {
+		myPlayer.play();
+	}
+	
 	self.handleSeek = function(content) {
 		var time = eval(content);
 		if (time>1) time = time - 1 ;
 		myPlayer.currentTime = time;
 		eddie.log("T="+time);
-		eddie.putLou('notification','show(seek '+Math.floor(time)+')');
+		//eddie.putLou('notification','show(seek '+Math.floor(time)+')');
 	}
 
 	self.handleSpeed = function(content){

@@ -5,3 +5,6 @@ setUrlTrigger(/lou/euscreen/ifa,/lou/domain/linkedtv/user/rbb/html5application/l
 setUrlTrigger(/lou/euscreen/ifa634,/lou/domain/linkedtv/user/rbb634/html5application/linkedtvhbbtvels?id=adb65e0a-642b-432f-aa86-c296dab0375a)
 setUrlTrigger(/lou/euscreen/ifa931,/lou/domain/linkedtv/user/rbb931/html5application/linkedtvhbbtvels?id=adb65e0a-642b-432f-aa86-c296dab0375a)
 setUrlTrigger(/lou/euscreen/ifa749,/lou/domain/linkedtv/user/rbb749/html5application/linkedtvhbbtvels?id=adb65e0a-642b-432f-aa86-c296dab0375a)
+setUrlTrigger(hbbtv.linkedtv.eu@/lou/linkedtv/ifa172,/lou/domain/linkedtv/user/rbb172/html5application/linkedtvhbbtvels?id=adb65e0a-642b-432f-aa86-c296dab0375a)
+setUrlTrigger(hbbtv.linkedtv.eu@/lou/linkedtv/ifa887,/lou/domain/linkedtv/user/rbb887/html5application/linkedtvhbbtvels?id=adb65e0a-642b-432f-aa86-c296dab0375a)
+setUrlTrigger(hbbtv.linkedtv.eu@/lou/linkedtv/ifa693,/lou/domain/linkedtv/user/rbb693/html5application/linkedtvhbbtvels?id=adb65e0a-642b-432f-aa86-c296dab0375a)

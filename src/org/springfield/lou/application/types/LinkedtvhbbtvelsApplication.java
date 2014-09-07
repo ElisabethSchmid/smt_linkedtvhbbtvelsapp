@@ -201,19 +201,19 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			loadContent(s, "desktopmanager");
 			loadContent(s, "mainscreeninfo");
 			loadContent(s, "mainscreencard");
+			loadContent(s, "copyrightbar");
 			loadContent(s, "mainscreenslider");
     		//TODO els  s.setContent("video","setVideo("+ episode.getStreamUri() +")");??
 			System.out.println("STREAM="+episode.getStreamuri(3));
 			//this.componentmanager.getComponent("video").put("app", "setVideo("+ episode.getStreamUri() +")");
-			String vurl = "http://images3.noterik.com/linkedtv/raw2.mp4";
-			this.componentmanager.getComponent("video").put("app", "setVideo("+ vurl +")");
+			this.componentmanager.getComponent("video").put("app", "setVideo("+ getLocalVideoUrl() +")");
 			
 			//this.componentmanager.getComponent("video").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
 		} else {
 			
 			loadContent(s, "hbbtvvideo");
-			String vurl = "http://images3.noterik.com/linkedtv/raw3.mp4";
-			this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ vurl +")");
+			String vurl = "http://images3.noterik.com/linkedtv/raw2.mp4";
+			this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ getLocalVideoUrl() +")");
 
 			//this.componentmanager.getComponent("hbbtvvideo").put("app", "setVideo("+ episode.getStreamuri(3) +")");
 			//this.componentmanager.getComponent("hbbtvvideo").put("app", "setPoster("+ episode.getStillsUri() +"/h/0/m/0/sec1.jpg)");
@@ -422,9 +422,10 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		String uid = params[1].substring(params[1].lastIndexOf("/")+1);
 		String orientation = params[2];
 		String entity = params[3];
-		String image = params[4];
+		//String image = params[4];
 		//String description = content.substring(content.indexOf(",", content.indexOf(image+",")+image.length())+1);
 		String description = null;
+		String image = null;
 		System.out.println("LOAD BLOCKDATA="+content+" TYPE="+type);
 		String body = "";
 		String color = "";
@@ -445,11 +446,20 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 		if (proxynode!=null) {
 			System.out.println("PROXY VALUE DESCRIPTION = "+proxynode.getProperty("description"));
 			description = proxynode.getProperty("description");
+			image = proxynode.getProperty("thumb");
+			if (image!=null && !image.equals("")) {
+				// remap to edna
+				image = getLocalUrl()+"/edna/external/"+image.substring(7)+"?script=medium";
+			}
+			System.out.println("PROXY VALUE IMAGE2 = "+image);
 		}
-		
-		FSList enrichmentsList = episode.getEnrichmentsFromAnnotation(annotation);
+
+		System.out.println("DAN1");
+		//FSList enrichmentsList = episode.getEnrichmentsFromAnnotation(annotation);
+		FSList enrichmentsList = new FSList();
+		System.out.println("DAN2");
 		List<FsNode> enrichments = enrichmentsList.getNodes();
-		
+		System.out.println("DAN3");
 		try {
 			switch (blocks.valueOf(type)) {
 				case who: color = Slider.colorClasses.get("whoslider");break;
@@ -457,8 +467,10 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 				case where: color = Slider.colorClasses.get("whereslider");break;
 				case chapter: color = Slider.colorClasses.get("chapterslider");break;
 			}
-		} catch(Exception e) {}		
-		
+		} catch(Exception e) {
+			e.printStackTrace();
+		}		
+		System.out.println("DAN4");
 		System.out.println("Orientation = "+orientation);
 		
 		if (orientation.equals("portrait")) {
@@ -470,6 +482,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 				body += "<iframe id=\"ext_inf\" src=\"http://"+lang+".wikipedia.org/wiki/"+entity+"\"></iframe>";
 			}
 		} else {
+			System.out.println("DAN5");
 			body += "<div class=\"triangleshift\"><div class=\""+color+"_large\"></div></div>";
 			body += "<div class=\"infoscreen_div_centered\">";
 			body += "<p id=\"infoscreen_title\" class=\"info_text_1\">"+entity+"</p>";
@@ -482,6 +495,7 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 			}
 			body += "<p class=\"info_text_1\">"+ AppLanguage.getFindOutMore() +"</p>";
 			body += "<div>";
+			/*
 			for (FsNode enrichment : enrichments) {
 				body += "<a href=\""+enrichment.getProperty("locator")+"\">";
 				body += enrichment.getProperty("type");
@@ -490,14 +504,19 @@ public class LinkedtvhbbtvelsApplication extends Html5Application {
 				}
 				body += "</a><br/>";
 			}
+			*/
 			body += "<p class=\"info_text_2\">"+ AppLanguage.getRotateScreen()+"</p>";
 			body += "</div>";
 			body += "</center>";
 			body += "</div>";
 			body += "</div>";
 			body += "<div class=\"infoscreen_div_centered\">";
-			body += "<img id=\"infimg\" src=\""+image+"\"/>";
+			System.out.println("DAN6");
+			if (image!=null) {
+				body += "<img id=\"infimg\" src=\""+image+"\"/>";
+			}
 			body += "</div>";
+			System.out.println("DAN7");
 		}
 
 		System.out.println("DATA="+body);
@@ -861,6 +880,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			loadContent(s, "hbbtvmanager");
 			loadContent(s, "mainscreeninfo");
 			loadContent(s, "mainscreencard");
+			loadContent(s, "copyrightbar");
 			loadContent(s, "mainscreenslider");
 			//this.componentmanager.getComponent("mainscreeninfo").put("app", "showMainScreenInfo()");
 		}
@@ -953,6 +973,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 						Object onscreen = s.getProperty("cardonscreen");
 				    	if (onscreen!=null) {
 				    		hideMainCard(s);
+				    		vcontinue(s);
 				    	}
 						gotoChapter(s);
 					break;
@@ -995,6 +1016,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 				    		s.setProperty("cardonscreenpos","0");
 				    		fillMainCard(s);
 				    		showMainCard(s);
+				    		pause(s);
 				    	}
 						break;
 					case RemoteControl.REMOTEKEY_DOWN :
@@ -1003,6 +1025,7 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 				    		hideMainSlider(s);
 				    	} else {
 				    		hideMainCard(s);
+				    		vcontinue(s);
 				    	}
 						break;
 	    		}
@@ -1171,9 +1194,10 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			int nodeId = getScreenPropertyInt(s, "selid");
 			node = timeline.getFsNodeById("chapter", nodeId);
 			
-			String body = "TEST:\n";
 			FSList annotationsList = episode.getAnnotationsFromChapter(node);
-			List<FsNode> annotations = annotationsList.getNodes();
+			//List<FsNode> annotations = annotationsList.getNodes();
+			
+			List<FsNode> annotations = FilterHbbtvAnnotations(annotationsList);
 			/*
 			for (FsNode annotation : annotations) {
 				body+=annotation.getProperty("locator")+"\n";
@@ -1181,14 +1205,28 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 			*/
 			int pos = getScreenPropertyInt(s, "cardonscreenpos");
 			FsNode annotation = annotations.get(pos);
+			
+			String title = "( "+(pos+1)+" / "+annotations.size()+" )<br />";
+			String description = "";
+			String thumb = "";
 			String eurl = annotation.getProperty("locator"); // we want stuff from the proxy
 			
 			FsNode proxynode = episode.getEntityFromProxy(eurl);
 			if (proxynode!=null) {
-				body += proxynode.getProperty("description");
+				title  = "( "+(pos+1)+" / "+annotations.size()+" ) "+proxynode.getProperty("type")+" : "+proxynode.getProperty("label");
+				description = proxynode.getProperty("description");
+				String img = proxynode.getProperty("thumb");
+				if (img!=null && !img.equals("")) {
+					// remap to edna
+					img = getLocalUrl()+"/edna/external/"+img.substring(7)+"?script=medium";
+					thumb = "<img id=\"cardthumb\" src=\""+img+"\" />";
+				}
+				System.out.println("ENT="+eurl);			
+				System.out.println("THUMB="+thumb);
 			}
-			
-	    	s.setContent("mainscreencard",body);
+		    s.setContent("cardpicture",thumb);
+	    	s.setContent("cardtitle",title);
+	    	s.setContent("carddescription",description);
 	    }
 	    
 	    private void fillMainCard_old(Screen s) {
@@ -1257,6 +1295,60 @@ private void addSlider(Screen s, String target, String slider, String sliderName
 		
 	    	s.setContent("mainscreencard",body);
 	    }
+	    
+	    public void pause(Screen s) {
+			if (s.getCapabilities().getDeviceMode()==s.getCapabilities().MODE_HBBTV) {
+				s.putMsg("hbbtvvideo","app","pause()");
+			} else {
+				s.putMsg("video","app","pause()");
+			}
+	    }
+	    
+	    public void vcontinue(Screen s) {
+			if (s.getCapabilities().getDeviceMode()==s.getCapabilities().MODE_HBBTV) {
+				s.putMsg("hbbtvvideo","app","continue()");
+			} else {
+				s.putMsg("video","app","continue()");
+			}
+	    }
+
+		
+		private List<FsNode> FilterHbbtvAnnotations(FSList annotations) {
+			List<FsNode> nodes = annotations.getNodes();
+			List<FsNode> results = new ArrayList<FsNode>();
+			for (FsNode node : nodes) {
+				if (node != null) {
+					String eurl = node.getProperty("locator"); // we want stuff from the proxy
+					System.out.println("FILTER URL="+eurl);
+					FsNode proxynode = episode.getEntityFromProxy(eurl);
+					System.out.println("FILTER NODE="+proxynode);
+					if (proxynode!=null) {
+						String label = proxynode.getProperty("label");
+						System.out.println("FILTER LABEL="+label);
+						if (label!=null) {
+							results.add(node);
+						}
+					}
+				}
+			}
+			return results;
+		}
+		
+		public String getLocalUrl() {
+			//return "http://a1.noterik.com";
+			return "http://192.168.1.98:8080";
+		}
+		
+		public String getLocalScreenshotUrl() {
+		//	return "http://a1.noterik.com/eddie/images/";
+			return "http://192.168.1.98:8080/eddie/images/";
+		}
+		
+		public String getLocalVideoUrl() {
+			//return "http://images3.noterik.com/linkedtv/raw2.mp4";
+			return "http://192.168.1.98:8080/eddie/raws/raw2.mp4";
+		}
+
 	    
 
 }
